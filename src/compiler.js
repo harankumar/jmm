@@ -12,11 +12,25 @@ function walk(astNode) {
     case "CallExpression":
       const callee = walk(astNode.callee);
       const args = astNode.arguments.map(walk);
+
+      // TODO -- use namespacing or structs to handle this
+      if (astNode.callee.type === "MemberExpression" &&
+        astNode.callee.object.name === "console" &&
+        astNode.callee.property.name === "log")
+        return `println!("{}", ${args})`
+
       return `${callee}(${args})`;
-    case "MemberExpression":
-      if (astNode.object.name === "console" &&
-        astNode.property.name === "log")
-        return "println!"
+    case "VariableDeclaration":
+      return astNode.declarations.map(walk).join(";\n");
+    case "VariableDeclarator":
+      const id = walk(astNode.id);
+      const init = walk(astNode.init);
+
+      return `let mut ${id} = ${init}`;
+      // TODO: handle const, var, let differently
+      // TODO: fix weird var scoping/hoisting rules
+    case "Identifier":
+      return astNode.name;
     case "Literal":
       const val = astNode.value;
       switch (typeof val) {
