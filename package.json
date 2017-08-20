@@ -1,0 +1,25 @@
+{
+  "name": "jmm",
+  "version": "0.0.0",
+  "description": "A Javascript to WASM compiler",
+  "main": "jmm.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": [
+    "WASM",
+    "compiler",
+    "transpiler",
+    "performance"
+  ],
+  "author": "Haran Kumar",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "acorn": "^5.1.1",
+    "commander": "^2.11.0",
+    "tern": "^0.21.0"
+  }
+}
