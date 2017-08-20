@@ -1,19 +1,28 @@
 "use strict";
 
 const fs = require('fs');
-//const cli = require('commander') -- TODO
+const cli = require('cli');
 const execSync = require('child_process').execSync;
 const compile = require('./compiler');
 
-const jsFile = "../test/helloworld/helloworld.js";
-const rsFile = "../test/helloworld/build/helloworld.rs";
-const htmlFile = "../test/helloworld/build/helloworld.html";
+const opts = cli.parse({
+  js: ["j", "A Javascript Input File", "file", "../test/helloworld/helloworld.js"],
+  out: ["o", "Output directory", "file", "../test/helloworld/build"]
+})
 
-const js = fs.readFileSync(jsFile);
+// TODO -- make this cross OS compatible
+const stub = opts.js.split("/").slice(-1)[0].split(".")[0];
+const rsFile = `${opts.out}/${stub}.rs`;
+const htmlFile = `${opts.out}/${stub}.html`;
 
-const rs = compile(js);
+console.log(stub, rsFile, htmlFile)
+
+const program = fs.readFileSync(opts.js);
+
+const rs = compile(program);
 console.log(rs);
 
 
 fs.writeFileSync(rsFile, rs);
+// TODO -- do this better
 execSync("rustc --target=wasm32-unknown-emscripten " + rsFile + " -o " + htmlFile)

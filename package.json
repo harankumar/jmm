@@ -19,6 +19,7 @@
   "license": "GPL-3.0",
   "dependencies": {
     "acorn": "^5.1.1",
+    "cli": "^1.0.1",
     "commander": "^2.11.0",
     "tern": "^0.21.0"
   }
