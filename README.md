@@ -12,9 +12,15 @@ JMM requires node, emscripten, and rust to be installed on your system.
     String literals
     console.log turns into println!("{}", STUFF)
   Rudimentary CLI
+0.1 "Fizz Buzz"
+  Compiles a simple "Fizz Buzz" Program
+    Handles if statements and for loops
+    Basic support for numbers
+    Better support for strings
+    Rudimentary assignment statements like +=
+  CLI flag for compiling to rustc or not
 
 ## Rough Roadmap
-0.1 "FizzBuzz" add in basic control structures, numbers, and booleans
 0.2 "Fibonacci" Basic functions (no closures), recursion
 0.3 "Dictionary" Basic objects as HashMaps
 0.4 "Scoping" Flesh out scoping rules
