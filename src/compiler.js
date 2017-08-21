@@ -1,6 +1,7 @@
 "use strict";
 
 const acorn = require('acorn');
+const fs = require('fs');
 
 const walkers = {
   "Program": walkProgram,
@@ -132,7 +133,8 @@ function walk(astNode) {
 
 function compile(js) {
   const AST = acorn.parse(js);
-  return walk(AST);
+  const lib = fs.readFileSync("./lib/lib.rs")
+  return lib + walk(AST);
 }
 
 module.exports = compile;
