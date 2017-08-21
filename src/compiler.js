@@ -16,7 +16,8 @@ const walkers = {
   "BinaryExpression": walkBinaryExpression,
   "BlockStatement": walkBlockStatement,
   "UpdateExpression": walkUpdateExpression,
-  "MemberExpression": walkMemberExpression
+  "MemberExpression": walkMemberExpression,
+  "AssignmentExpression": walkAssignmentExpression
 };
 
 // TODO: de-clutter/categorize this stuff
@@ -64,7 +65,7 @@ function walkLiteral(astNode) {
   const val = astNode.value;
   switch (typeof val) {
     case "string":
-      return `"${val}"`
+      return `String::from("${val}")`
     case "number":
       return `({${val} as f64})`
   }
@@ -84,7 +85,10 @@ function walkIfStatement(astNode) {
   const consequent = walk(astNode.consequent);
   const alternate = walk(astNode.alternate);
 
-  return `if(${test})\n{${consequent}} \nelse\n {${alternate}}`
+  if (alternate)
+    return `if(${test})\n{${consequent}} \nelse\n {${alternate}}`
+  else
+    return `if(${test})\n{${consequent}}`
 }
 
 function walkBinaryExpression(astNode) {
@@ -119,12 +123,30 @@ function walkUpdateExpression(astNode) {
     return `{${arg} += 1.0; ${arg}}`
 }
 
+function walkAssignmentExpression(astNode) {
+  // TODO -- make this complete, handle weirdities
+
+  const left = walk(astNode.left);
+  const right = walk(astNode.right);
+  const op = astNode.operator;
+
+  // NOTE: THIS DOESN'T HANDLE THESE AS EXPRESSIONS
+
+  // TODO -- type inference
+  // if (typeof astNode.left.)
+  // let assignment = `${left} ${op} ${right}`;
+  // if (typeof astNode.right.value === "string")
+  const assignment = `[(${left}).to_string(), (${right}).to_string()].join("")`; // Seriously, we need some type inference up in here
+  return `${left} = ${assignment}`
+  // return `{${left} = ${assignment}; ${left}}`;
+}
+
 function walkMemberExpression(astNode) {
   // TODO
 }
 
 function walk(astNode) {
-  if (walkers[astNode.type])
+  if (astNode && astNode.type && walkers[astNode.type])
     return walkers[astNode.type](astNode);
   else {
     console.log(astNode)
