@@ -3,11 +3,11 @@
 const fs = require('fs');
 const cli = require('cli');
 const execSync = require('child_process').execSync;
-const compile = require('./compiler');
+const compiler = require('./compiler');
 
 const opts = cli.parse({
-  js: ["j", "A Javascript Input File", "file", "../test/fizzbuzz/fizzbuzz.js"],
-  out: ["o", "Output directory", "file", "../test/fizzbuzz/build"],
+  js: ["j", "A Javascript Input File", "file", "../test/fibonacci/fibonacci.js"],
+  out: ["o", "Output directory", "file", "../test/fibonacci/build"],
   rustc: ["r", "Call rustc?", true, false]
 })
 
@@ -20,7 +20,7 @@ console.log(stub, rsFile, htmlFile)
 
 const program = fs.readFileSync(opts.js);
 
-const rs = compile(program);
+const rs = compiler.compile(program);
 console.log(rs);
 
 
