@@ -17,7 +17,9 @@ const walkers = {
   "BlockStatement": walkBlockStatement,
   "UpdateExpression": walkUpdateExpression,
   "MemberExpression": walkMemberExpression,
-  "AssignmentExpression": walkAssignmentExpression
+  "AssignmentExpression": walkAssignmentExpression,
+  "FunctionDeclaration": walkFunctionDeclaration,
+  "ReturnStatement": walkReturnStatement
 };
 
 // TODO: de-clutter/categorize this stuff
@@ -139,6 +141,23 @@ function walkAssignmentExpression(astNode) {
   const assignment = `[(${left}).to_string(), (${right}).to_string()].join("")`; // Seriously, we need some type inference up in here
   return `${left} = ${assignment}`
   // return `{${left} = ${assignment}; ${left}}`;
+}
+
+function walkFunctionDeclaration(astNode) {
+  // TODO -- handle expressions, generators
+
+  const id = walk(astNode.id);
+  const params = astNode.params.map(walk)
+    .map((x) => x + ":f64"); // TODO --- type infer!!!
+  const body = walk(astNode.body);
+
+  return `fn ${id} (${params.join(", ")}) -> f64 {\n${body}\n};`;
+}
+
+function walkReturnStatement(astNode) {
+  const ret = walk(astNode.argument);
+
+  return `return (${ret})`;
 }
 
 function walkMemberExpression(astNode) {
