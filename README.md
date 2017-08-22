@@ -27,9 +27,9 @@ JMM requires node, emscripten, and rust to be installed on your system.
   Still needs a lot of work, especially type inference
 
 ## Rough Roadmap
-0.2 "Fibonacci" Basic functions (no closures), recursion
-0.3 "Dictionary" Basic objects as HashMaps
-0.4 "Scoping" Flesh out scoping rules
-0.5 "Closures"
-0.6 "OOP?"
-0.7 "DOM" Get DOM APIs
+0.3 "The Big Shakeup" refactor/reorg, add in type inference
+0.4 "Dictionary" Basic objects as HashMaps
+0.5 "Scoping" Flesh out scoping rules
+0.6 "Closures"
+0.7 "OOP?"
+0.8 "DOM" Get DOM APIs
