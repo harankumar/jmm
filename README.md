@@ -19,6 +19,12 @@ JMM requires node, emscripten, and rust to be installed on your system.
     Better support for strings
     Rudimentary assignment statements like +=
   CLI flag for compiling to rustc or not
+0.2 "Fibonacci"
+  Compiles a simple "Fibonacci" program
+    Basic functions (no closures)
+    recursion
+    return statements
+  Still needs a lot of work, especially type inference
 
 ## Rough Roadmap
 0.2 "Fibonacci" Basic functions (no closures), recursion
