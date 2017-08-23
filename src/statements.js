@@ -2,7 +2,9 @@ module.exports = {
   walkForStatement: walkForStatement,
   walkIfStatement: walkIfStatement,
   walkBlockStatement: walkBlockStatement,
-  walkReturnStatement: walkReturnStatement
+  walkReturnStatement: walkReturnStatement,
+  walkWhileStatement: walkWhileStatement,
+  walkExpressionStatement: walkExpressionStatement
 }
 
 const compiler = require('./compiler');
@@ -15,6 +17,13 @@ function walkForStatement(astNode) {
   const body = walk(astNode.body);
 
   return `${init};\n while(${test}){\n${body}; ${update};\n}`
+}
+
+function walkWhileStatement(astNode) {
+  const test = walk(astNode.test);
+  const body = walk(astNode.body);
+
+  return `while(${test}){\n${body}\n}`
 }
 
 function walkIfStatement(astNode) {
@@ -34,6 +43,10 @@ function walkBlockStatement(astNode) {
 
   const body = astNode.body.map(walk).map((s) => s + ";").join("\n");
   return body;
+}
+
+function walkExpressionStatement(astNode) {
+  return `${walk(astNode.expression)};`;
 }
 
 function walkReturnStatement(astNode) {

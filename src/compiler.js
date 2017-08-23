@@ -14,13 +14,14 @@ const expressions = require('./expressions');
 
 const walkers = {
   "Program": walkProgram,
-  "ExpressionStatement": expressions.walkExpression,
+  "ExpressionStatement": statements.walkExpressionStatement,
   "CallExpression": expressions.walkCallExpression,
   "VariableDeclaration": declarations.walkVariableDeclaration,
   "VariableDeclarator": declarations.walkVariableDeclarator,
   "Identifier": walkIdentifier,
   "Literal": walkLiteral,
   "ForStatement": statements.walkForStatement,
+  "WhileStatement": statements.walkWhileStatement,
   "IfStatement": statements.walkIfStatement,
   "BinaryExpression": expressions.walkBinaryExpression,
   "BlockStatement": statements.walkBlockStatement,

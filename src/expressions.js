@@ -1,5 +1,4 @@
 module.exports = {
-  walkExpression: walkExpression,
   walkCallExpression: walkCallExpression,
   walkBinaryExpression: walkBinaryExpression,
   walkUpdateExpression: walkUpdateExpression,
@@ -9,10 +8,6 @@ module.exports = {
 
 const compiler = require('./compiler');
 const walk = compiler.walk;
-
-function walkExpression(astNode) {
-  return walk(astNode.expression)
-}
 
 function walkCallExpression(astNode) {
   const callee = walk(astNode.callee);
@@ -52,6 +47,8 @@ function walkUpdateExpression(astNode) {
 }
 
 function walkAssignmentExpression(astNode) {
+  console.log(astNode)
+
   // TODO -- make this complete, handle weirdities
 
   const left = walk(astNode.left);
@@ -61,12 +58,14 @@ function walkAssignmentExpression(astNode) {
   // NOTE: THIS DOESN'T HANDLE THESE AS EXPRESSIONS
 
   // TODO -- type inference
-  // if (typeof astNode.left.)
-  // let assignment = `${left} ${op} ${right}`;
-  // if (typeof astNode.right.value === "string")
-  const assignment = `[(${left}).to_string(), (${right}).to_string()].join("")`; // Seriously, we need some type inference up in here
-  return `${left} = ${assignment}`
-  // return `{${left} = ${assignment}; ${left}}`;
+  let assignment;
+
+  if (astNode.operator === "+=")
+    assignment = `${left} = [(${left}).to_string(), (${right}).to_string()].join("")`; // Seriously, we need some type inference up in here
+  else
+    assignment = `${left} ${op} ${right}`;
+
+  return `${assignment}`
 }
 
 function walkMemberExpression(astNode) {
