@@ -47,8 +47,6 @@ function walkUpdateExpression(astNode) {
 }
 
 function walkAssignmentExpression(astNode) {
-  console.log(astNode)
-
   // TODO -- make this complete, handle weirdities
 
   const left = walk(astNode.left);
