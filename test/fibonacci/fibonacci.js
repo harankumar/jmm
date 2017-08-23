@@ -20,7 +20,8 @@ function fib_switch(n) {
 function better_fib(n) {
   let a = 0,
     b = 1,
-    i = 2;
+    i;
+  i = 2;
   while (i <= n) {
     let sum = a + b;
     a = b;
