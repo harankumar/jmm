@@ -29,7 +29,7 @@ const walkers = {
   "MemberExpression": expressions.walkMemberExpression,
   "AssignmentExpression": expressions.walkAssignmentExpression,
   "FunctionDeclaration": declarations.walkFunctionDeclaration,
-  "ReturnStatement": statements.walkReturnStatement
+  "ReturnStatement": statements.walkReturnStatement,
   "SwitchStatement": statements.walkSwitchStatement
 };
 
