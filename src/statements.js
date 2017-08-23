@@ -4,7 +4,8 @@ module.exports = {
   walkBlockStatement: walkBlockStatement,
   walkReturnStatement: walkReturnStatement,
   walkWhileStatement: walkWhileStatement,
-  walkExpressionStatement: walkExpressionStatement
+  walkExpressionStatement: walkExpressionStatement,
+  walkSwitchStatement: walkSwitchStatement
 }
 
 const compiler = require('./compiler');
@@ -36,6 +37,28 @@ function walkIfStatement(astNode) {
   else
     return `if(${test})\n{${consequent}}`
 }
+
+function walkSwitchStatement(astNode) {
+  console.log(astNode.cases[2])
+
+  if (astNode.cases.length === 0)
+    return "";
+
+  const discriminant = walk(astNode.discriminant);
+  // If it's well written javascript and has a "break" statement, this done goof
+  // TODO: FIXME
+  const consequent = astNode.cases[0].consequent.map(walk).map((x) => x + ";\n");
+  const test = walk(astNode.cases[0].test);
+  const astNodeRec = Object.assign({}, astNode);
+  astNodeRec.cases = astNode.cases.slice(1);
+  const alternate = walk(astNodeRec);
+
+  if (test)
+    return `if (${discriminant} == ${test}){\n${consequent}} else {${alternate}}`
+  else
+    return consequent;
+}
+
 
 function walkBlockStatement(astNode) {
   // TODO -- FIX ME!!

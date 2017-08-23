@@ -30,6 +30,7 @@ const walkers = {
   "AssignmentExpression": expressions.walkAssignmentExpression,
   "FunctionDeclaration": declarations.walkFunctionDeclaration,
   "ReturnStatement": statements.walkReturnStatement
+  "SwitchStatement": statements.walkSwitchStatement
 };
 
 function walkProgram(astNode) {
