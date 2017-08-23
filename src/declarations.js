@@ -15,9 +15,14 @@ function walkVariableDeclaration(astNode) {
 
 function walkVariableDeclarator(astNode) {
   const id = walk(astNode.id);
-  const init = walk(astNode.init);
 
-  return `let mut ${id} = ${init}`;
+  if (astNode.init) {
+    const init = walk(astNode.init);
+    return `let mut ${id} = ${init}`;
+  } else {
+    return `let mut ${id}`;
+  }
+
 }
 
 function walkFunctionDeclaration(astNode) {
