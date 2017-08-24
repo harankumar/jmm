@@ -10,7 +10,7 @@ const walk = compiler.walk;
 function walkVariableDeclaration(astNode) {
   // TODO: handle const, var, let differently
   // TODO: fix weird var scoping/hoisting rules
-  return astNode.declarations.map(walk).join(";\n");
+  return astNode.declarations.map(walk);
 }
 
 function walkVariableDeclarator(astNode) {
@@ -18,9 +18,9 @@ function walkVariableDeclarator(astNode) {
 
   if (astNode.init) {
     const init = walk(astNode.init);
-    return `let mut ${id} = ${init}`;
+    return `let mut ${id} = ${init};\n`;
   } else {
-    return `let mut ${id}`;
+    return `let mut ${id};\n`;
   }
 
 }
