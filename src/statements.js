@@ -39,24 +39,61 @@ function walkIfStatement(astNode) {
 }
 
 function walkSwitchStatement(astNode) {
-  console.log(astNode.cases[2])
-
-  if (astNode.cases.length === 0)
-    return "";
+  // Doesn't yet handle break statement weirditude...
+  // Doesn't handle break statements nested in if statements, etc.
+  // Those are kind of a code smell though so it's probably fine
+  // TODO: make this fully complete
 
   const discriminant = walk(astNode.discriminant);
-  // If it's well written javascript and has a "break" statement, this done goof
-  // TODO: FIXME
-  const consequent = astNode.cases[0].consequent.map(walk).map((x) => x + ";\n");
-  const test = walk(astNode.cases[0].test);
-  const astNodeRec = Object.assign({}, astNode);
-  astNodeRec.cases = astNode.cases.slice(1);
-  const alternate = walk(astNodeRec);
 
-  if (test)
-    return `if (${discriminant} == ${test}){\n${consequent}} else {${alternate}}`
+  const ifelses = []; // list of form {tests: ____, consequent: ____}
+
+  let tests = [];
+  for (let caseNode of astNode.cases) {
+    if (caseNode.test)
+      tests.push(walk(caseNode.test));
+    else {
+      tests.push("default");
+    }
+    if (caseNode.consequent.length > 0) {
+      let consequent = [];
+
+      for (let line of caseNode.consequent) {
+        if (line.type === "BreakStatement")
+          break;
+        else
+          consequent.push(walk(line));
+      }
+
+      ifelses.push({
+        test: testBuilder(tests, discriminant),
+        consequent: consequent
+      });
+
+      tests = [];
+    }
+  }
+
+  return ifElseBuilder(ifelses);
+}
+
+function testBuilder(tests, discriminant) {
+  return tests.map((test) => {
+    if (test === "default")
+      return "true";
+    else
+      return `${discriminant} == (${test})`;
+  }).join(" || ");
+}
+
+function ifElseBuilder(ifelses) {
+  const first = ifelses[0];
+  const rest = ifelses.slice(1);
+
+  if (ifelses.length === 1)
+    return `if(${first.test}){\n${first.consequent.join(";\n")};\n}`
   else
-    return consequent;
+    return `if(${first.test}){\n${first.consequent.join(";\n")};\n} else {${ifElseBuilder(rest)}}`
 }
 
 
