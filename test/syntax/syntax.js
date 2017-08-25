@@ -11,6 +11,11 @@ c = y - 100;
 c = y * 0.1423;
 c = y / 22;
 c = y % 2123;
+// LOOPY STUFF
+let i = 0;
+do {
+  i++;
+} while (i < 100);
 
 // SWITCH STATEMENTS
 let x = 5;

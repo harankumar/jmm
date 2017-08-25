@@ -17,7 +17,7 @@ function walkCallExpression(astNode) {
   if (astNode.callee.type === "MemberExpression" &&
     astNode.callee.object.name === "console" &&
     astNode.callee.property.name === "log")
-    return `println!("{}", ${args})\n`
+    return `println!("{}", ${args})`;
 
   return `${callee}(${args})`;
 }

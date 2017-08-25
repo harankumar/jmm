@@ -74,7 +74,7 @@ function walkSwitchStatement(astNode) {
     }
   }
 
-  return ifElseBuilder(ifelses);
+  return ifElseBuilder(ifelses) + "\n";
 }
 
 function testBuilder(tests, discriminant) {
@@ -101,16 +101,16 @@ function walkBlockStatement(astNode) {
   // TODO -- FIX ME!!
   // This probably mangles scoping rules and stuff
 
-  const body = astNode.body.map(walk).map((s) => s + ";").join("\n");
+  const body = astNode.body.map(walk);
   return body;
 }
 
 function walkExpressionStatement(astNode) {
-  return `${walk(astNode.expression)};`;
+  return `${walk(astNode.expression)};\n`;
 }
 
 function walkReturnStatement(astNode) {
   const ret = walk(astNode.argument);
 
-  return `return (${ret})`;
+  return `return (${ret});\n`;
 }

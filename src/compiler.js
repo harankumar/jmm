@@ -34,8 +34,8 @@ const walkers = {
 };
 
 function walkProgram(astNode) {
-  const body = astNode.body.map(walk).map((s) => s + ";").join("\n");
-  return `fn main(){\n${body}\n}`;
+  const body = astNode.body.map(walk).join("");
+  return `fn main(){\n${body}}`;
 }
 
 function walkIdentifier(astNode) {
