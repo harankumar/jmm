@@ -98,10 +98,16 @@ function ifElseBuilder(ifelses) {
   const first = ifelses[0];
   const rest = ifelses.slice(1);
 
-  if (ifelses.length === 1)
-    return `if(${first.test}){\n${first.consequent.join(";\n")};\n}`
-  else
-    return `if(${first.test}){\n${first.consequent.join(";\n")};\n} else {\n${ifElseBuilder(rest)}}\n`
+  if (ifelses.length === 0) {
+    return "";
+  } else if (ifelses.length === 1) {
+    if (first.test === "true")
+      return `${first.consequent.join(";\n")}\n;`;
+    else
+      return `if(${first.test}){\n${first.consequent.join(";\n")};\n}`;
+  } else {
+    return `if(${first.test}){\n${first.consequent.join(";\n")};\n} else {\n${ifElseBuilder(rest)}}\n`;
+  }
 }
 
 
