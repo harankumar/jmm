@@ -7,30 +7,33 @@ module.exports = {
 
 const acorn = require('acorn');
 const fs = require('fs');
-const tern = require('tern');
 const declarations = require('./declarations');
 const statements = require('./statements');
 const expressions = require('./expressions');
 
 const walkers = {
   "Program": walkProgram,
-  "ExpressionStatement": statements.walkExpressionStatement,
-  "CallExpression": expressions.walkCallExpression,
-  "VariableDeclaration": declarations.walkVariableDeclaration,
-  "VariableDeclarator": declarations.walkVariableDeclarator,
   "Identifier": walkIdentifier,
   "Literal": walkLiteral,
+
+  "ExpressionStatement": statements.walkExpressionStatement,
   "ForStatement": statements.walkForStatement,
   "WhileStatement": statements.walkWhileStatement,
+  "DoWhileStatement": statements.walkDoWhileStatement,
   "IfStatement": statements.walkIfStatement,
-  "BinaryExpression": expressions.walkBinaryExpression,
+  "SwitchStatement": statements.walkSwitchStatement,
   "BlockStatement": statements.walkBlockStatement,
-  "UpdateExpression": expressions.walkUpdateExpression,
+  "ReturnStatement": statements.walkReturnStatement,
+
+  "CallExpression": expressions.walkCallExpression,
+  "BinaryExpression": expressions.walkBinaryExpression,
   "MemberExpression": expressions.walkMemberExpression,
   "AssignmentExpression": expressions.walkAssignmentExpression,
-  "FunctionDeclaration": declarations.walkFunctionDeclaration,
-  "ReturnStatement": statements.walkReturnStatement,
-  "SwitchStatement": statements.walkSwitchStatement
+  "UpdateExpression": expressions.walkUpdateExpression,
+
+  "VariableDeclaration": declarations.walkVariableDeclaration,
+  "VariableDeclarator": declarations.walkVariableDeclarator,
+  "FunctionDeclaration": declarations.walkFunctionDeclaration
 };
 
 function walkProgram(astNode) {
