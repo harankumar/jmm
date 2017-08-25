@@ -10,7 +10,7 @@ const walk = compiler.walk;
 function walkVariableDeclaration(astNode) {
   // TODO: handle const, var, let differently
   // TODO: fix weird var scoping/hoisting rules
-  return astNode.declarations.map(walk);
+  return astNode.declarations.map(walk).join("");
 }
 
 function walkVariableDeclarator(astNode) {
@@ -33,5 +33,5 @@ function walkFunctionDeclaration(astNode) {
     .map((x) => x + ":f64"); // TODO --- type infer!!!
   const body = walk(astNode.body);
 
-  return `fn ${id} (${params.join(", ")}) -> f64 {\n${body}\n};`;
+  return `fn ${id} (${params.join(", ")}) -> f64 {\n${body}};\n`;
 }

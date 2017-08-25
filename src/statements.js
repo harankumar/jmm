@@ -41,9 +41,9 @@ function walkIfStatement(astNode) {
   const alternate = walk(astNode.alternate);
 
   if (alternate)
-    return `if(${test})\n{${consequent}} \nelse\n {${alternate}}`
+    return `if(${test})\n{${consequent}} \nelse\n {${alternate}}\n`
   else
-    return `if(${test})\n{${consequent}}`
+    return `if(${test}){\n${consequent}}\n`
 }
 
 function walkSwitchStatement(astNode) {
@@ -101,7 +101,7 @@ function ifElseBuilder(ifelses) {
   if (ifelses.length === 1)
     return `if(${first.test}){\n${first.consequent.join(";\n")};\n}`
   else
-    return `if(${first.test}){\n${first.consequent.join(";\n")};\n} else {${ifElseBuilder(rest)}}`
+    return `if(${first.test}){\n${first.consequent.join(";\n")};\n} else {\n${ifElseBuilder(rest)}}\n`
 }
 
 
@@ -109,7 +109,7 @@ function walkBlockStatement(astNode) {
   // TODO -- FIX ME!!
   // This probably mangles scoping rules and stuff
 
-  const body = astNode.body.map(walk);
+  const body = astNode.body.map(walk).join("");
   return body;
 }
 
