@@ -55,3 +55,16 @@ switch (x) {
   default:
     console.log("Not 2, 3, 4, or 5");
 }
+
+switch (x) {
+  default: console.log("Hello World!");
+}
+
+switch (x) {
+
+}
+
+switch (x) {
+  case 4:
+    console.log("blarg");
+}
