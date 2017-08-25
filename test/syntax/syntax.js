@@ -1,4 +1,4 @@
-// NUMBERS STUFF
+//NUMBERS STUFF
 let y = 4;
 let b = y > 2; // Boolean stuff with numbers
 b = y === 2;
@@ -11,11 +11,35 @@ c = y - 100;
 c = y * 0.1423;
 c = y / 22;
 c = y % 2123;
+// y += 1; // Assignment operations
+// y -= 1;
+// y /= 1.323;
+// y *= 123123;
+// y %= 2;
+// y++;
+// y--;
+
 // LOOPY STUFF
+for (let k = 0; k < 100; k++) {
+  console.log(k);
+}
+
 let i = 0;
 do {
   i++;
 } while (i < 100);
+
+while (i < 150) {
+  i++;
+}
+
+// IF/ELSE
+if (i < 100)
+  console.log("<");
+else if (i == 100)
+  console.log("==");
+else
+  console.log(">");
 
 // SWITCH STATEMENTS
 let x = 5;
