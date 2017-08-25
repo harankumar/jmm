@@ -3,7 +3,8 @@ module.exports = {
   walkBinaryExpression: walkBinaryExpression,
   walkUpdateExpression: walkUpdateExpression,
   walkAssignmentExpression: walkAssignmentExpression,
-  walkMemberExpression: walkMemberExpression
+  walkMemberExpression: walkMemberExpression,
+  walkConditionalExpression: walkConditionalExpression
 }
 
 const compiler = require('./compiler');
@@ -68,4 +69,12 @@ function walkAssignmentExpression(astNode) {
 
 function walkMemberExpression(astNode) {
   // TODO
+}
+
+function walkConditionalExpression(astNode) {
+  const test = walk(astNode.test);
+  const consequent = walk(astNode.consequent);
+  const alternate = walk(astNode.alternate);
+
+  return `if (${test}) {${consequent}} else {${alternate}}`
 }

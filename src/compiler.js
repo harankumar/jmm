@@ -30,6 +30,7 @@ const walkers = {
   "MemberExpression": expressions.walkMemberExpression,
   "AssignmentExpression": expressions.walkAssignmentExpression,
   "UpdateExpression": expressions.walkUpdateExpression,
+  "ConditionalExpression": expressions.walkConditionalExpression,
 
   "VariableDeclaration": declarations.walkVariableDeclaration,
   "VariableDeclarator": declarations.walkVariableDeclarator,
