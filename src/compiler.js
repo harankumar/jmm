@@ -10,6 +10,7 @@ const fs = require('fs');
 const declarations = require('./declarations');
 const statements = require('./statements');
 const expressions = require('./expressions');
+const type_infer = require('./type_infer');
 
 const walkers = {
   "Program": walkProgram,
@@ -66,6 +67,7 @@ function walk(astNode) {
 
 function compile(js) {
   const AST = acorn.parse(js);
+  type_infer.registerFile(js);
   const rslib = fs.readFileSync("./rslib/lib.rs")
   return rslib + walk(AST);
 }

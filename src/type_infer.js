@@ -1,5 +1,6 @@
 module.exports = {
-  infer: infer
+  infer: infer,
+  registerFile: registerFile
 }
 
 const tern = new(require('tern').Server)({});
