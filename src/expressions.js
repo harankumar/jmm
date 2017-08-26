@@ -45,7 +45,9 @@ function walkUpdateExpression(astNode) {
   const arg = walk(astNode.argument);
 
   if (astNode.operator === "++")
-    return `{${arg} += 1.0; ${arg}}`
+    return `{${arg} += 1.0; ${arg}}`;
+  else if (astNode.operator === "--")
+    return `{${arg} -= 1.0; ${arg}}`;
 }
 
 function walkAssignmentExpression(astNode) {
