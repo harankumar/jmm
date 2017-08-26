@@ -20,6 +20,7 @@
   "dependencies": {
     "acorn": "^5.1.1",
     "cli": "^1.0.1",
+    "deasync": "^0.1.10",
     "tern": "^0.21.0"
   }
 }
