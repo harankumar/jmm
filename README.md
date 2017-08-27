@@ -41,8 +41,15 @@ JMM requires node, emscripten, and rust to be installed on your system.
     Works with += operator... more to come in 0.4!
 
 ## Rough Roadmap
-0.4 "Dictionary" Basic objects as HashMaps
-0.5 "Scoping" Flesh out scoping rules
-0.6 "Closures"
-0.7 "OOP?"
-0.8 "DOM" Get DOM APIs
+0.4 "Flesh"
+  fully support all the primitive types in JS and their operators (no objects yet)
+    null & undefined (comparison operators)
+    bool
+    number
+      infinity
+      NaN
+      bitwise operators
+    string
+  support most basic libraries (static functions)
+    Math
+    Number
