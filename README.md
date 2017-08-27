@@ -1,6 +1,6 @@
 # JMM
 JMM (Javascript Minus Minus) compiles a subset of javascript to WASM.
-It's super experimental, so don't use it in production.
+It's super experimental, so don't use it in production (duh!).
 
 ## Dependencies
 JMM requires node, emscripten, and rust to be installed on your system.
@@ -25,9 +25,22 @@ JMM requires node, emscripten, and rust to be installed on your system.
     recursion
     return statements
   Still needs a lot of work, especially type inference
+0.3 "Slightly Legit"
+  Reorganized compiler into files based on type of astNode (expression, declaration, statement)
+  Supports more control flow stuff and other syntax
+    while loops
+    do-while loops
+    most switch statements
+        (as long as there's no weird stuff with nested break statements or other stuff you probably shouldn't be doing anyway)
+    -- (decrement operator)
+    conditional expressions (-?-:-)
+  Slightly better code generation -- fewer random semicolons and newlines
+  Convenient CLI flag for tests
+  Type inference with tern
+    Got the library set up with deasync
+    Works with += operator... more to come in 0.4!
 
 ## Rough Roadmap
-0.3 "The Big Shakeup" refactor/reorg, add in type inference
 0.4 "Dictionary" Basic objects as HashMaps
 0.5 "Scoping" Flesh out scoping rules
 0.6 "Closures"

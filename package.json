@@ -1,6 +1,6 @@
 {
   "name": "jmm",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A Javascript to WASM compiler",
   "main": "jmm.js",
   "directories": {
