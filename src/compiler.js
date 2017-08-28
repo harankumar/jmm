@@ -30,7 +30,9 @@ const walkers = {
   "ReturnStatement": statements.walkReturnStatement,
 
   "CallExpression": expressions.walkCallExpression,
+  "UnaryExpression": expressions.walkUnaryExpression,
   "BinaryExpression": expressions.walkBinaryExpression,
+  "LogicalExpression": expressions.walkLogicalExpression,
   "MemberExpression": expressions.walkMemberExpression,
   "AssignmentExpression": expressions.walkAssignmentExpression,
   "UpdateExpression": expressions.walkUpdateExpression,

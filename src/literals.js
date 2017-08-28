@@ -13,5 +13,7 @@ function walkLiteral(astNode) {
       return `String::from("${val}")`;
     case "number":
       return `({${val} as f64})`;
+    case "boolean":
+      return val.toString();
   }
 }

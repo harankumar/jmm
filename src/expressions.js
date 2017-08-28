@@ -1,6 +1,8 @@
 module.exports = {
   walkCallExpression: walkCallExpression,
+  walkUnaryExpression: walkUnaryExpression,
   walkBinaryExpression: walkBinaryExpression,
+  walkLogicalExpression: walkLogicalExpression,
   walkUpdateExpression: walkUpdateExpression,
   walkAssignmentExpression: walkAssignmentExpression,
   walkMemberExpression: walkMemberExpression,
@@ -24,6 +26,18 @@ function walkCallExpression(astNode) {
   return `${callee}(${args})`;
 }
 
+function walkUnaryExpression(astNode) {
+  // TODO -- FIX ME!!
+  // Explicitly handle every possible operator
+
+  const argument = walk(astNode.argument);
+  const op = astNode.operator;
+
+  // Verify the rust equivalent exists
+  if (op === "!")
+    return `${op}(${argument})`;
+}
+
 function walkBinaryExpression(astNode) {
   // TODO -- FIX ME!!
   // Rust and JS don't actually have a one-to-one correlations in what operations mean
@@ -35,6 +49,16 @@ function walkBinaryExpression(astNode) {
   if (op === "%")
     return `({${left}}) ${op} ({${right}})`;
   else
+    return `${left} ${op} ${right}`;
+}
+
+function walkLogicalExpression(astNode) {
+  const left = walk(astNode.left);
+  const right = walk(astNode.right);
+  const op = astNode.operator;
+
+  // Verify that the operator has a rust equivalent
+  if (op === "&&" || op === "||")
     return `${left} ${op} ${right}`;
 }
 
