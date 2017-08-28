@@ -7,15 +7,18 @@ module.exports = {
 
 const acorn = require('acorn');
 const fs = require('fs');
+
 const declarations = require('./declarations');
 const statements = require('./statements');
 const expressions = require('./expressions');
+const literals = require('./literals');
+
 const type_infer = require('./type_infer');
 
 const walkers = {
   "Program": walkProgram,
   "Identifier": walkIdentifier,
-  "Literal": walkLiteral,
+  "Literal": literals.walkLiteral,
 
   "ExpressionStatement": statements.walkExpressionStatement,
   "ForStatement": statements.walkForStatement,
@@ -45,16 +48,6 @@ function walkProgram(astNode) {
 
 function walkIdentifier(astNode) {
   return astNode.name;
-}
-
-function walkLiteral(astNode) {
-  const val = astNode.value;
-  switch (typeof val) {
-    case "string":
-      return `String::from("${val}")`
-    case "number":
-      return `({${val} as f64})`
-  }
 }
 
 function walk(astNode) {
