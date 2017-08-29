@@ -17,12 +17,6 @@ function walkCallExpression(astNode) {
   const callee = walk(astNode.callee);
   const args = astNode.arguments.map(walk);
 
-  // TODO -- use namespacing or structs to handle this
-  if (astNode.callee.type === "MemberExpression" &&
-    astNode.callee.object.name === "console" &&
-    astNode.callee.property.name === "log")
-    return `println!("{}", ${args})`;
-
   return `${callee}(${args})`;
 }
 
@@ -95,7 +89,13 @@ function walkAssignmentExpression(astNode) {
 }
 
 function walkMemberExpression(astNode) {
-  // TODO
+  // TODO -- handle objects differently than structs
+  // This should probably use traits to make HashMap same as struct?
+
+  let object = walk(astNode.object);
+  let property = walk(astNode.property);
+
+  return `${object}.${property}`;
 }
 
 function walkConditionalExpression(astNode) {
