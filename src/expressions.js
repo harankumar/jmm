@@ -40,7 +40,9 @@ function walkBinaryExpression(astNode) {
   // Pull this out
   const op = astNode.operator === "===" ? "==" : astNode.operator;
 
-  if (op === "%")
+  if (type_infer(astNode.left).name === "string" && op === "+") {
+    return `[${left}, (${right}).to_string()].join("")`;
+  } else if (op === "%")
     return `({${left}}) ${op} ({${right}})`;
   else
     return `${left} ${op} ${right}`;
@@ -80,8 +82,10 @@ function walkAssignmentExpression(astNode) {
   // TODO -- type inference
   let assignment;
 
-  if (astNode.operator === "+=" && type_infer(astNode.left) === "string")
-    assignment = `${left} = [(${left}).to_string(), (${right}).to_string()].join("")`; // Seriously, we need some type inference up in here
+  console.log(type_infer(astNode.left))
+
+  if (astNode.operator === "+=" && type_infer(astNode.left).name === "string")
+    assignment = `${left} = [${left}, (${right}).to_string()].join("")`; // Seriously, we need some type inference up in here
   else
     assignment = `${left} ${op} ${right}`;
 
