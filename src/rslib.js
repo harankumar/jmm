@@ -1,8 +1,8 @@
 const fs = require('fs');
 
 const imports = [
-  "console",
   "jmm_js_object",
+  "console",
   "logical_operators"
 ];
 

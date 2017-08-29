@@ -38,19 +38,38 @@ function walkUnaryExpression(astNode) {
 }
 
 function walkBinaryExpression(astNode) {
+  switch (astNode.operator) {
+    case "+":
+      return walkAddExpression(astNode);
+  }
+
+  // BEGIN CRAPPY CODE
   // TODO -- FIX ME!!
   // Rust and JS don't actually have a one-to-one correlations in what operations mean
   const left = walk(astNode.left);
   const right = walk(astNode.right);
   // Pull this out
   const op = astNode.operator === "===" ? "==" : astNode.operator;
-
   if (type_infer(astNode.left).name === "string" && op === "+") {
     return `[${left}, (${right}).to_string()].join("")`;
   } else if (op === "%")
     return `({${left}}) ${op} ({${right}})`;
   else
     return `${left} ${op} ${right}`;
+  // END CRAPPY CODE
+  // TODO: Fix teh above
+}
+
+function walkAddExpression(astNode) {
+  const left = walk(astNode.left);
+  const right = walk(astNode.right);
+
+  if (type_infer(astNode.left).type === "string")
+    return `[${left}, (${right}).to_str()].join("")`;
+  if (type_infer(astNode.right).type === "string")
+    return `[(${left}).to_str(), ${right}].join("")`;
+  else
+    return `((${left}).to_num() + (${right}).to_num())`;
 }
 
 function walkLogicalExpression(astNode) {
@@ -81,6 +100,7 @@ function walkUpdateExpression(astNode) {
 
 function walkAssignmentExpression(astNode) {
   // TODO -- make this complete, handle weirdities
+  // TODO -- mangle identifiers?
 
   const left = walk(astNode.left);
   const right = walk(astNode.right);

@@ -2,6 +2,7 @@ trait JmmJsObject {
     fn type_of (&self) -> String;
     fn is_truthy(&self) -> bool;
     fn to_str (&self) -> String;
+    fn to_num (&self) -> f64;
 }
 
 impl JmmJsObject for bool {
@@ -17,6 +18,13 @@ impl JmmJsObject for bool {
       match *self {
         true => String::from("true"),
         false => String::from("false")
+      }
+    }
+
+    fn to_num (&self) -> f64 {
+      match *self {
+        true => 1.0,
+        false => 0.0
       }
     }
 }
@@ -36,6 +44,11 @@ impl JmmJsObject for String {
     fn to_str (&self) -> String {
       return (*self).clone();
     }
+
+    fn to_num(&self) -> f64 {
+      // TODO -- change me!
+      return -42.0;
+    }
 }
 
 impl JmmJsObject for f64 {
@@ -53,5 +66,9 @@ impl JmmJsObject for f64 {
     fn to_str (&self) -> String {
       // TODO -- fully flesh this out
       return (*self).to_string();
+    }
+
+    fn to_num(&self) -> f64 {
+      return *self;
     }
 }
