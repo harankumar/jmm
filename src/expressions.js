@@ -12,6 +12,7 @@ module.exports = {
 const compiler = require('./compiler');
 const walk = compiler.walk;
 const type_infer = require('./type_infer').infer;
+const boolExpressions = require('./bool_expressions');
 
 function walkCallExpression(astNode) {
   const callee = walk(astNode.callee);
@@ -27,18 +28,29 @@ function walkCallExpression(astNode) {
 }
 
 function walkUnaryExpression(astNode) {
-  // TODO -- FIX ME!!
-  // Explicitly handle every possible operator
-
-  const argument = walk(astNode.argument);
-  const op = astNode.operator;
-
-  // Verify the rust equivalent exists
-  if (op === "!")
-    return `${op}(${argument})`;
+  switch (type_infer(astNode.argument).type) {
+    case "bool":
+      return boolExpressions.walkUnary(astNode);
+  }
 }
 
 function walkBinaryExpression(astNode) {
+  const left_type = type_infer(astNode.left).type;
+  const right_type = type_infer(astNode.right).type;
+
+  if (astNode.operator === "===") {
+    if (left_type !== right_type) {
+      // TODO -- put warnings in a separate module and make it less crappy
+      console.log("JMM WARNING: Mismatched types in " + astNode);
+      return "false";
+    }
+  }
+
+  if (astNode.left_type === "bool" && astNode.right_type === "bool")
+    return boolExpressions.walkBinary(astNode);
+
+  /* BEGIN CRAPPY CODE */
+
   // TODO -- FIX ME!!
   // Rust and JS don't actually have a one-to-one correlations in what operations mean
   const left = walk(astNode.left);
@@ -50,16 +62,16 @@ function walkBinaryExpression(astNode) {
     return `({${left}}) ${op} ({${right}})`;
   else
     return `${left} ${op} ${right}`;
+
+  /* END CRAPPY CODE*/
 }
 
 function walkLogicalExpression(astNode) {
-  const left = walk(astNode.left);
-  const right = walk(astNode.right);
-  const op = astNode.operator;
+  const left_type = type_infer(astNode.left).type;
+  const right_type = type_infer(astNode.right).type;
 
-  // Verify that the operator has a rust equivalent
-  if (op === "&&" || op === "||")
-    return `${left} ${op} ${right}`;
+  if (left_type === "bool" && right_type === "bool")
+    return boolExpressions.walkLogical(astNode);
 }
 
 function walkUpdateExpression(astNode) {
