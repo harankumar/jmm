@@ -2,7 +2,8 @@ const fs = require('fs');
 
 const imports = [
   "console",
-  "jmm_js_object"
+  "jmm_js_object",
+  "logical_operators"
 ];
 
 module.exports = function() {

@@ -15,7 +15,10 @@ const type_infer = require('./type_infer').infer;
 
 function walkCallExpression(astNode) {
   const callee = walk(astNode.callee);
-  const args = astNode.arguments.map(walk);
+  const args = astNode.arguments
+    .map(walk)
+    .map((arg) => `(${arg}).clone()`)
+    .join(", ");
 
   return `${callee}(${args})`;
 }
@@ -28,8 +31,10 @@ function walkUnaryExpression(astNode) {
   const op = astNode.operator;
 
   // Verify the rust equivalent exists
-  if (op === "!")
-    return `${op}(${argument})`;
+  switch (op) {
+    case "!":
+      return `js_not((${argument}).clone())`
+  }
 }
 
 function walkBinaryExpression(astNode) {
@@ -54,8 +59,12 @@ function walkLogicalExpression(astNode) {
   const op = astNode.operator;
 
   // Verify that the operator has a rust equivalent
-  if (op === "&&" || op === "||")
-    return `${left} ${op} ${right}`;
+  switch (op) {
+    case "&&":
+      return `js_and((${left}).clone(), (${right}).clone())`;
+    case "||":
+      return `js_or((${left}).clone(), (${right}).clone())`;
+  }
 }
 
 function walkUpdateExpression(astNode) {
