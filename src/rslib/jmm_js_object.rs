@@ -26,12 +26,13 @@ impl JmmJsObject for String {
     }
 }
 
-// impl JmmJsObject for f64 {
-//     fn type_of(&self) -> String {
-//         return String::from("number");
-//     }
-//
-//     fn to_str (&self) -> String {
-//       return self.to_string();
-//     }
-// }
+impl JmmJsObject for f64 {
+    fn type_of(&self) -> String {
+        return String::from("number");
+    }
+
+    fn to_str (&self) -> String {
+      // TODO -- fully flesh this out
+      return (*self).to_string();
+    }
+}
