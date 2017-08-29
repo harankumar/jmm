@@ -2,3 +2,4 @@
 /test/*/build
 /.git
 /package-lock.json
+/scratch/
