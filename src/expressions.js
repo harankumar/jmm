@@ -14,6 +14,7 @@ const walk = compiler.walk;
 const type_infer = require('./type_infer').infer;
 
 const arithmetic = require('./arithmetic_operators');
+const comparison = require('./comparison_operators');
 
 function walkCallExpression(astNode) {
   const callee = walk(astNode.callee);
@@ -41,10 +42,18 @@ function walkUnaryExpression(astNode) {
 
 function walkBinaryExpression(astNode) {
   const builders = {
+    // ARITHMETIC
     "+": arithmetic.buildAdd,
     "-": arithmetic.buildSub,
     "*": arithmetic.buildMult,
-    "/": arithmetic.buildDiv
+    "/": arithmetic.buildDiv,
+    // COMPARISON
+    "<": comparison.buildLessThan,
+    ">": comparison.buildGreaterThan,
+    "===": comparison.buildStrictEquality,
+    "==": comparison.buildEquality,
+    "!==": comparison.buildStrictInequality,
+    "!=": comparison.buildInequality
   }
 
   const left_type = type_infer(astNode.left).type;
@@ -52,7 +61,11 @@ function walkBinaryExpression(astNode) {
   const right_type = type_infer(astNode.right).type;
   const right = walk(astNode.right);
 
-  return (builders[astNode.operator])(left, right, left_type, right_type);
+  const builder = builders[astNode.operator];
+  if (builder)
+    return builder(left, right, left_type, right_type);
+  else
+    console.log("DOESN'T KNOW HOW TO HANDLE " + astNode.operator)
 }
 
 
