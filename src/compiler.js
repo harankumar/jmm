@@ -57,13 +57,18 @@ function walk(astNode) {
   if (astNode && astNode.type && walkers[astNode.type])
     return walkers[astNode.type](astNode);
   else {
-    console.log(astNode)
+    console.log("JMM DOESN'T KNOW HOW TO HANDLE " + astNode);
   }
 }
 
 function compile(js) {
   const AST = acorn.parse(js);
+  console.log("AST\n\n" + JSON.stringify(AST, null, 2) + "\n\n");
+
   type_infer.registerFile(js);
+  const generatedRust = walk(AST);
+  console.log("GENERATED RUST\n\n" + generatedRust + "\n\n");
+
   const rslib = rslibgen();
   return rslib + walk(AST);
 }

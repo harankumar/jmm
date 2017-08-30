@@ -22,8 +22,6 @@ function walkCallExpression(astNode) {
     .map((arg) => `(${arg}).clone()`)
     .join(", ");
 
-
-  console.log(type_infer(astNode.arguments[0]))
   return `${callee}(${args})`;
 }
 
@@ -97,8 +95,6 @@ function walkAssignmentExpression(astNode) {
 
   // TODO -- type inference
   let assignment;
-
-  console.log(type_infer(astNode.left))
 
   if (astNode.operator === "+=" && type_infer(astNode.left).name === "string")
     assignment = `${left} = [${left}, (${right}).to_string()].join("")`; // Seriously, we need some type inference up in here

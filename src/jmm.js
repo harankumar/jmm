@@ -22,13 +22,9 @@ const stub = opts.js.split("/").slice(-1)[0].split(".")[0];
 const rsFile = `${opts.out}/${stub}.rs`; // Should the .js stay in between?
 const htmlFile = `${opts.out}/${stub}.html`;
 
-console.log(stub, rsFile, htmlFile)
-
 const program = fs.readFileSync(opts.js);
 
 const rs = compiler.compile(program);
-console.log(rs);
-
 
 fs.writeFileSync(rsFile, rs);
 

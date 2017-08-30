@@ -20,7 +20,7 @@ function infer(astNode) {
   let data;
   tern.request(params, function(err, results) {
     if (err)
-      console.log(err);
+      console.log("TERN DONE GOOFED " + err);
 
     data = results;
     done = true;
