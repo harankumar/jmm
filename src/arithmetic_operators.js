@@ -2,10 +2,15 @@ module.exports = {
   buildAdd: buildAdd,
   buildSub: buildSub,
   buildMult: buildTimes,
-  buildDiv: buildDiv
-}
+  buildDiv: buildDiv,
+  isNumCoercible: isNumCoercible
+};
 
 const num_coercible = new Set(["number", "bool"]);
+
+function isNumCoercible(type){
+    return num_coercible.has(type);
+}
 
 function buildAdd(left, right, left_type, right_type) {
   if (num_coercible.has(left_type) && num_coercible.has(right_type))

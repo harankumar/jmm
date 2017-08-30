@@ -49,12 +49,14 @@ function walkBinaryExpression(astNode) {
     "/": arithmetic.buildDiv,
     // COMPARISON
     "<": comparison.buildLessThan,
+    "<=": comparison.buildLessThanOrEqual,
     ">": comparison.buildGreaterThan,
+    ">=": comparison.buildGreaterThanOrEqual,
     "===": comparison.buildStrictEquality,
     "==": comparison.buildEquality,
     "!==": comparison.buildStrictInequality,
     "!=": comparison.buildInequality
-  }
+  };
 
   const left_type = type_infer(astNode.left).type;
   const left = walk(astNode.left);
@@ -65,7 +67,7 @@ function walkBinaryExpression(astNode) {
   if (builder)
     return builder(left, right, left_type, right_type);
   else
-    console.log("DOESN'T KNOW HOW TO HANDLE " + astNode.operator)
+    console.log("DOESN'T KNOW HOW TO HANDLE " + astNode.operator);
 }
 
 
