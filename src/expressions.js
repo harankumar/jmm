@@ -41,6 +41,8 @@ function walkBinaryExpression(astNode) {
   switch (astNode.operator) {
     case "+":
       return walkAddExpression(astNode);
+    case "-":
+      return walkMinusExpression(astNode);
   }
 
   // BEGIN CRAPPY CODE
@@ -70,6 +72,15 @@ function walkAddExpression(astNode) {
     return `[(${left}).to_str(), ${right}].join("")`;
   else
     return `((${left}).to_num() + (${right}).to_num())`;
+}
+
+function walkMinusExpression(astNode) {
+  // TODO: check for types that can't be converted to numbers and return NaN
+
+  const left = walk(astNode.left);
+  const right = walk(astNode.right);
+
+  return `((${left}).to_num() - (${right}).to_num())`;
 }
 
 function walkLogicalExpression(astNode) {

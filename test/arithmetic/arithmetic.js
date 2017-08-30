@@ -22,3 +22,11 @@ console.log(true + "foo");
 console.log("foo" + false);
 console.log("foo" + 1);
 console.log("foo" + "bar");
+
+// SUBTRACTION
+console.log("You should see 1 printed a bunch of times");
+console.log(1);
+console.log(2 - 1);
+console.log(3 - true - true);
+console.log(1 - false);
+console.log(1 - false);
