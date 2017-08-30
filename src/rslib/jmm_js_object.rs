@@ -72,3 +72,23 @@ impl JmmJsObject for f64 {
         return *self;
     }
 }
+
+struct NaN {}
+
+impl JmmJsObject for NaN {
+    fn type_of(&self) -> String {
+        return String::from("number");
+    }
+
+    fn is_truthy(&self) -> bool {
+        return false;
+    }
+
+    fn to_str(&self) -> String {
+        return String::from("NaN");
+    }
+
+    fn to_num(&self) -> f64 {
+        return *self;
+    }
+}
