@@ -1,9 +1,13 @@
 const fs = require('fs');
 
 const imports = [
+  // TRAITS
   "jmm_js_object",
-  "console",
-  "logical_operators"
+  "to_num",
+  // OPERATORS
+  "logical_operators",
+  // STATIC VARIABLES
+  "console"
 ];
 
 module.exports = function() {
