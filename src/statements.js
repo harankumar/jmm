@@ -1,131 +1,131 @@
 module.exports = {
-  walkForStatement: walkForStatement,
-  walkIfStatement: walkIfStatement,
-  walkBlockStatement: walkBlockStatement,
-  walkReturnStatement: walkReturnStatement,
-  walkWhileStatement: walkWhileStatement,
-  walkExpressionStatement: walkExpressionStatement,
-  walkSwitchStatement: walkSwitchStatement,
-  walkDoWhileStatement: walkDoWhileStatement
-}
+    walkForStatement: walkForStatement,
+    walkIfStatement: walkIfStatement,
+    walkBlockStatement: walkBlockStatement,
+    walkReturnStatement: walkReturnStatement,
+    walkWhileStatement: walkWhileStatement,
+    walkExpressionStatement: walkExpressionStatement,
+    walkSwitchStatement: walkSwitchStatement,
+    walkDoWhileStatement: walkDoWhileStatement
+};
 
 const compiler = require('./compiler');
 const walk = compiler.walk;
 const type_infer = require('./type_infer').infer;
 
 function walkForStatement(astNode) {
-  const init = walk(astNode.init);
-  const test = walk(astNode.test);
-  const update = walk(astNode.update);
-  const body = walk(astNode.body);
+    const init = walk(astNode.init);
+    const test = walk(astNode.test);
+    const update = walk(astNode.update);
+    const body = walk(astNode.body);
 
-  return `${init};\n while(${test}){\n${body}\n${update};\n}`
+    return `${init};\n while(${test}){\n${body}\n${update};\n}`;
 }
 
 function walkWhileStatement(astNode) {
-  const test = walk(astNode.test);
-  const body = walk(astNode.body);
+    const test = walk(astNode.test);
+    const body = walk(astNode.body);
 
-  return `while(${test}){\n${body}\n}`;
+    return `while(${test}){\n${body}\n}`;
 }
 
 function walkDoWhileStatement(astNode) {
-  const test = walk(astNode.test);
-  const body = walk(astNode.body);
+    const test = walk(astNode.test);
+    const body = walk(astNode.body);
 
-  return `${body}\n while (${test}){\n${body}}\n`;
+    return `${body}\n while (${test}){\n${body}}\n`;
 }
 
 function walkIfStatement(astNode) {
-  const test = walk(astNode.test);
-  const consequent = walk(astNode.consequent);
-  const alternate = walk(astNode.alternate);
+    const test = walk(astNode.test);
+    const consequent = walk(astNode.consequent);
+    const alternate = walk(astNode.alternate);
 
-  if (alternate)
-    return `if(${test})\n{${consequent}} \nelse\n {${alternate}}\n`
-  else
-    return `if(${test}){\n${consequent}}\n`
+    if (alternate)
+        return `if(${test})\n{${consequent}} \nelse\n {${alternate}}\n`;
+    else
+        return `if(${test}){\n${consequent}}\n`;
 }
 
 function walkSwitchStatement(astNode) {
-  // Doesn't yet handle break statement weirditude...
-  // Doesn't handle break statements nested in if statements, etc.
-  // Those are kind of a code smell though so it's probably fine
-  // TODO: make this fully complete
+    // Doesn't yet handle break statement weirditude...
+    // Doesn't handle break statements nested in if statements, etc.
+    // Those are kind of a code smell though so it's probably fine
+    // TODO: make this fully complete
 
-  const discriminant = walk(astNode.discriminant);
+    const discriminant = walk(astNode.discriminant);
 
-  const ifelses = []; // list of form {tests: ____, consequent: ____}
+    const ifelses = []; // list of form {tests: ____, consequent: ____}
 
-  let tests = [];
-  for (let caseNode of astNode.cases) {
-    if (caseNode.test)
-      tests.push(walk(caseNode.test));
-    else {
-      tests.push("default");
+    let tests = [];
+    for (let caseNode of astNode.cases) {
+        if (caseNode.test)
+            tests.push(walk(caseNode.test));
+        else {
+            tests.push("default");
+        }
+        if (caseNode.consequent.length > 0) {
+            let consequent = [];
+
+            for (let line of caseNode.consequent) {
+                if (line.type === "BreakStatement")
+                    break;
+                else
+                    consequent.push(walk(line));
+            }
+
+            ifelses.push({
+                test: testBuilder(tests, discriminant),
+                consequent: consequent
+            });
+
+            tests = [];
+        }
     }
-    if (caseNode.consequent.length > 0) {
-      let consequent = [];
 
-      for (let line of caseNode.consequent) {
-        if (line.type === "BreakStatement")
-          break;
-        else
-          consequent.push(walk(line));
-      }
-
-      ifelses.push({
-        test: testBuilder(tests, discriminant),
-        consequent: consequent
-      });
-
-      tests = [];
-    }
-  }
-
-  return ifElseBuilder(ifelses) + "\n";
+    return ifElseBuilder(ifelses) + "\n";
 }
 
 function testBuilder(tests, discriminant) {
-  return tests.map((test) => {
-    if (test === "default")
-      return "true";
-    else
-      return `${discriminant} == (${test})`;
-  }).join(" || ");
+    return tests.map((test) => {
+        if (test === "default")
+            return "true";
+        else
+            return `${discriminant} == (${test})`;
+    }).join(" || ");
 }
 
 function ifElseBuilder(ifelses) {
-  const first = ifelses[0];
-  const rest = ifelses.slice(1);
+    const first = ifelses[0];
+    const rest = ifelses.slice(1);
 
-  if (ifelses.length === 0) {
-    return "";
-  } else if (ifelses.length === 1) {
-    if (first.test === "true")
-      return `${first.consequent.join(";\n")}\n;`;
-    else
-      return `if(${first.test}){\n${first.consequent.join(";\n")};\n}`;
-  } else {
-    return `if(${first.test}){\n${first.consequent.join(";\n")};\n} else {\n${ifElseBuilder(rest)}}\n`;
-  }
+    if (ifelses.length === 0) {
+        return "";
+    } else if (ifelses.length === 1) {
+        if (first.test === "true")
+            return `${first.consequent.join(";\n")}\n;`;
+        else
+            return `if(${first.test}){\n${first.consequent.join(";\n")};\n}`;
+    } else {
+        return `if(${first.test}){\n${first.consequent.join(";\n")};\n} else {\n${ifElseBuilder(rest)}}\n`;
+    }
 }
 
 
 function walkBlockStatement(astNode) {
-  // TODO -- FIX ME!!
-  // This probably mangles scoping rules and stuff
+    // TODO -- FIX ME!!
+    // This probably mangles scoping rules and stuff
 
-  const body = astNode.body.map(walk).join("");
-  return body;
+    const body = astNode.body.map(walk).join("");
+    return body;
 }
 
 function walkExpressionStatement(astNode) {
-  return `${walk(astNode.expression)};\n`;
+    return `${walk(astNode.expression)};\n`;
 }
 
 function walkReturnStatement(astNode) {
-  const ret = walk(astNode.argument);
+    const ret = walk(astNode.argument);
 
-  return `return (${ret});\n`;
+    return `return (${ret});\n`;
 }

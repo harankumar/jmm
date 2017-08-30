@@ -1,13 +1,13 @@
 module.exports = {
-  buildLessThan: buildLessThan,
-  buildLessThanOrEqual: buildLessThanOrEqual,
-  buildGreaterThan: buildGreaterThan,
-  buildGreaterThanOrEqual: buildGreaterThanOrEqual,
-  buildStrictEquality: buildStrictEquality,
-  buildEquality: buildEquality,
-  buildStrictInequality: buildStrictInequality,
-  buildInequality: buildInequality
-}
+    buildLessThan: buildLessThan,
+    buildLessThanOrEqual: buildLessThanOrEqual,
+    buildGreaterThan: buildGreaterThan,
+    buildGreaterThanOrEqual: buildGreaterThanOrEqual,
+    buildStrictEquality: buildStrictEquality,
+    buildEquality: buildEquality,
+    buildStrictInequality: buildStrictInequality,
+    buildInequality: buildInequality
+};
 
 const isNumCoercible = require('./arithmetic_operators').isNumCoercible;
 

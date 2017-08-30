@@ -1,38 +1,38 @@
 module.exports = {
-  walkVariableDeclaration: walkVariableDeclaration,
-  walkVariableDeclarator: walkVariableDeclarator,
-  walkFunctionDeclaration: walkFunctionDeclaration
-}
+    walkVariableDeclaration: walkVariableDeclaration,
+    walkVariableDeclarator: walkVariableDeclarator,
+    walkFunctionDeclaration: walkFunctionDeclaration
+};
 
 const compiler = require('./compiler');
 const walk = compiler.walk;
 const type_infer = require('./type_infer').infer;
 
 function walkVariableDeclaration(astNode) {
-  // TODO: handle const, var, let differently
-  // TODO: fix weird var scoping/hoisting rules
-  return astNode.declarations.map(walk).join("");
+    // TODO: handle const, var, let differently
+    // TODO: fix weird var scoping/hoisting rules
+    return astNode.declarations.map(walk).join("");
 }
 
 function walkVariableDeclarator(astNode) {
-  const id = walk(astNode.id);
+    const id = walk(astNode.id);
 
-  if (astNode.init) {
-    const init = walk(astNode.init);
-    return `let mut ${id} = ${init};\n`;
-  } else {
-    return `let mut ${id};\n`;
-  }
+    if (astNode.init) {
+        const init = walk(astNode.init);
+        return `let mut ${id} = ${init};\n`;
+    } else {
+        return `let mut ${id};\n`;
+    }
 
 }
 
 function walkFunctionDeclaration(astNode) {
-  // TODO -- handle expressions, generators
+    // TODO -- handle expressions, generators
 
-  const id = walk(astNode.id);
-  const params = astNode.params.map(walk)
-    .map((x) => x + ":f64"); // TODO --- type infer!!!
-  const body = walk(astNode.body);
+    const id = walk(astNode.id);
+    const params = astNode.params.map(walk)
+          .map((x) => x + ":f64"); // TODO --- type infer!!!
+    const body = walk(astNode.body);
 
-  return `fn ${id} (${params.join(", ")}) -> f64 {\n${body}};\n`;
+    return `fn ${id} (${params.join(", ")}) -> f64 {\n${body}};\n`;
 }

@@ -1,13 +1,13 @@
 module.exports = {
-  walkIdentifier: walkIdentifier
-}
+    walkIdentifier: walkIdentifier
+};
 
 function walkIdentifier(astNode) {
-  switch (astNode.name) {
+    switch (astNode.name) {
     case "NaN":
-      return "NaN {}";
+        return "NaN {}";
     default:
-      // TODO -- mangle names
-      return astNode.name;
-  }
+        // TODO -- mangle names
+        return astNode.name;
+    }
 }
