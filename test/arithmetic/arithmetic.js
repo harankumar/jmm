@@ -16,7 +16,7 @@ console.log((x + z) + 3);
 console.log(x + (y + y + z) + 2);
 console.log(x + (y + z + (y + z) + (y + (y + z + 1))))
 // addition as concatenation
-console.log("You should see the following: 1foo, truefoo, foofalse, foo1");
+console.log("You should see the following: 1foo, truefoo, foofalse, foo1, foobar");
 console.log(1 + "foo");
 console.log(true + "foo");
 console.log("foo" + false);

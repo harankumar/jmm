@@ -13,6 +13,8 @@ const compiler = require('./compiler');
 const walk = compiler.walk;
 const type_infer = require('./type_infer').infer;
 
+const arithmetic = require('./arithmetic_operators');
+
 function walkCallExpression(astNode) {
   const callee = walk(astNode.callee);
   const args = astNode.arguments
@@ -20,6 +22,8 @@ function walkCallExpression(astNode) {
     .map((arg) => `(${arg}).clone()`)
     .join(", ");
 
+
+  console.log(type_infer(astNode.arguments[0]))
   return `${callee}(${args})`;
 }
 
@@ -38,50 +42,22 @@ function walkUnaryExpression(astNode) {
 }
 
 function walkBinaryExpression(astNode) {
-  switch (astNode.operator) {
-    case "+":
-      return walkAddExpression(astNode);
-    case "-":
-      return walkMinusExpression(astNode);
+  const builders = {
+    "+": arithmetic.buildAdd,
+    "-": arithmetic.buildSub,
+    "*": arithmetic.buildMult,
+    "/": arithmetic.buildDiv
   }
 
-  // BEGIN CRAPPY CODE
-  // TODO -- FIX ME!!
-  // Rust and JS don't actually have a one-to-one correlations in what operations mean
+  const left_type = type_infer(astNode.left).type;
   const left = walk(astNode.left);
-  const right = walk(astNode.right);
-  // Pull this out
-  const op = astNode.operator === "===" ? "==" : astNode.operator;
-  if (type_infer(astNode.left).name === "string" && op === "+") {
-    return `[${left}, (${right}).to_string()].join("")`;
-  } else if (op === "%")
-    return `({${left}}) ${op} ({${right}})`;
-  else
-    return `${left} ${op} ${right}`;
-  // END CRAPPY CODE
-  // TODO: Fix teh above
-}
-
-function walkAddExpression(astNode) {
-  const left = walk(astNode.left);
+  const right_type = type_infer(astNode.right).type;
   const right = walk(astNode.right);
 
-  if (type_infer(astNode.left).type === "string")
-    return `[${left}, (${right}).to_str()].join("")`;
-  if (type_infer(astNode.right).type === "string")
-    return `[(${left}).to_str(), ${right}].join("")`;
-  else
-    return `((${left}).to_num() + (${right}).to_num())`;
+  return (builders[astNode.operator])(left, right, left_type, right_type);
 }
 
-function walkMinusExpression(astNode) {
-  // TODO: check for types that can't be converted to numbers and return NaN
 
-  const left = walk(astNode.left);
-  const right = walk(astNode.right);
-
-  return `((${left}).to_num() - (${right}).to_num())`;
-}
 
 function walkLogicalExpression(astNode) {
   const left = walk(astNode.left);
