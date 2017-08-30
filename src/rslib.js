@@ -1,6 +1,8 @@
 const fs = require('fs');
 
 const imports = [
+  // TYPES
+  "nan",
   // TRAITS
   "jmm_js_object",
   "to_num",

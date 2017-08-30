@@ -56,8 +56,6 @@ impl JmmJsObject for f64 {
     }
 }
 
-struct NaN {}
-
 impl JmmJsObject for NaN {
     fn type_of(&self) -> String {
         return String::from("number");

@@ -12,13 +12,14 @@ const declarations = require('./declarations');
 const statements = require('./statements');
 const expressions = require('./expressions');
 const literals = require('./literals');
+const identifiers = require('./identifiers');
 
 const rslibgen = require('./rslib');
 const type_infer = require('./type_infer');
 
 const walkers = {
   "Program": walkProgram,
-  "Identifier": walkIdentifier,
+  "Identifier": identifiers.walkIdentifier,
   "Literal": literals.walkLiteral,
 
   "ExpressionStatement": statements.walkExpressionStatement,
@@ -47,10 +48,6 @@ const walkers = {
 function walkProgram(astNode) {
   const body = astNode.body.map(walk).join("");
   return `fn main(){\n${body}}`;
-}
-
-function walkIdentifier(astNode) {
-  return astNode.name;
 }
 
 function walk(astNode) {
