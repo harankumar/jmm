@@ -62,13 +62,11 @@ Object.extend = function (destination, source) {
 //   flog/engine.js
 
 
-var Color = function (r, g, b) {
+function Color (r, g, b) {
     this.red = r;
     this.green = g;
     this.blue = b;
-};
-
-
+}
 Color.prototype = {
     add: function (c) {
         return new Color(this.red + c.red, this.green + c.green, this.blue + c.blue);
@@ -126,27 +124,24 @@ Color.prototype = {
 
         return "rgb(" + r + "," + g + "," + b + ")";
     }
-}
+};
 
-var Light = function (pos, color, intensity) {
+function Light (pos, color, intensity) {
     this.position = pos;
     this.color = color;
     this.intensity = (intensity ? intensity : 10.0);
-};
-
+}
 Light.prototype = {
     toString: function () {
         return 'Light [' + this.position.x + ',' + this.position.y + ',' + this.position.z + ']';
     }
-}
+};
 
-var Vector = function (x, y, z) {
+function Vector (x, y, z) {
     this.x = x;
     this.y = y;
     this.z = z;
-};
-
-
+}
 Vector.prototype = {
     copy: function (vector) {
         this.x = vector.x;
@@ -193,40 +188,36 @@ Vector.prototype = {
     toString: function () {
         return 'Vector [' + this.x + ',' + this.y + ',' + this.z + ']';
     }
-}
-
-var Ray = function (pos, dir) {
-    this.position = pos;
-    this.direction = dir;
 };
 
-
+function Ray (pos, dir) {
+    this.position = pos;
+    this.direction = dir;
+}
 Ray.prototype = {
     toString: function () {
         return 'Ray [' + this.position + ',' + this.direction + ']';
     }
-}
+};
 
-var Scene = function () {
+function Scene () {
     this.camera = new Camera(
         new Vector(0, 0, -5),
         new Vector(0, 0, 1),
         new Vector(0, 1, 0)
     );
-    this.shapes = new Array();
-    this.lights = new Array();
+    this.shapes = [];
+    this.lights = [];
     this.background = new Background(new Color(0, 0, 0.5), 0.2);
-};
+}
 
-
-var BaseMaterial = function (reflection, transparency, glass) {
+function BaseMaterial (reflection, transparency, glass) {
     this.gloss = glass;
     this.transparency = transparency;
     this.reflection = reflection;
     this.refraction = 0.50;
     this.hasTexture = false;
-};
-
+}
 BaseMaterial.prototype = {
     wrapUp: function (t) {
         t = t % 2.0;
@@ -240,18 +231,15 @@ BaseMaterial.prototype = {
             ', transparency=' + this.transparency +
             ', hasTexture=' + this.hasTexture + ']';
     }
-}
+};
 
-
-var Solid = function (color, reflection, refraction, transparency, gloss) {
+function Solid (color, reflection, refraction, transparency, gloss) {
     this.color = color;
     this.reflection = reflection;
     this.transparency = transparency;
     this.gloss = gloss;
     this.hasTexture = false;
-};
-
-
+}
 Solid.prototype = Object.create(BaseMaterial.prototype, {
     getColor: {
         value: function (u, v) {
@@ -268,8 +256,7 @@ Solid.prototype = Object.create(BaseMaterial.prototype, {
     },
 });
 
-
-var Chessboard = function (colorEven, colorOdd, reflection, transparency, gloss, density) {
+function Chessboard (colorEven, colorOdd, reflection, transparency, gloss, density) {
     this.colorEven = colorEven;
     this.colorOdd = colorOdd;
     this.reflection = reflection;
@@ -277,8 +264,7 @@ var Chessboard = function (colorEven, colorOdd, reflection, transparency, gloss,
     this.gloss = gloss;
     this.density = density;
     this.hasTexture = true;
-};
-
+}
 Chessboard.prototype = Object.create(BaseMaterial.prototype, {
     getColor: {
         value: function (u, v) {
@@ -300,12 +286,11 @@ Chessboard.prototype = Object.create(BaseMaterial.prototype, {
     },
 });
 
-var Sphere = function (pos, radius, material) {
+function Sphere (pos, radius, material) {
     this.radius = radius;
     this.position = pos;
     this.material = material;
-};
-
+}
 Sphere.prototype = {
     intersect: function (ray) {
         var info = new IntersectionInfo();
@@ -332,15 +317,13 @@ Sphere.prototype = {
     toString: function () {
         return 'Sphere [position=' + this.position + ', radius=' + this.radius + ']';
     }
-}
+};
 
-var Plane = function (pos, d, material) {
+function Plane (pos, d, material) {
     this.position = pos;
     this.d = d;
     this.material = material;
-};
-
-
+}
 Plane.prototype = {
     intersect: function (ray) {
         var info = new IntersectionInfo();
@@ -373,9 +356,9 @@ Plane.prototype = {
     toString: function () {
         return 'Plane [' + this.position + ', d=' + this.d + ']';
     }
-}
+};
 
-var IntersectionInfo = function () {
+function IntersectionInfo () {
     this.color = new Color(0, 0, 0);
     this.isHit = false;
     this.hitCount = 0;
@@ -384,22 +367,20 @@ var IntersectionInfo = function () {
     this.normal = null;
     this.color = null;
     this.distance = null;
-};
-
+}
 IntersectionInfo.prototype = {
     toString: function () {
         return 'Intersection [' + this.position + ']';
     }
-}
+};
 
-var Camera = function (pos, lookAt, up) {
+function Camera (pos, lookAt, up) {
     this.position = pos;
     this.lookAt = lookAt;
     this.up = up;
     this.equator = lookAt.normalize().cross(this.up);
     this.screen = this.position.add(this.lookAt);
-};
-
+}
 Camera.prototype = {
     getRay: function (vx, vy) {
         var pos = this.screen.subtract(
@@ -413,15 +394,13 @@ Camera.prototype = {
     toString: function () {
         return 'Ray []';
     }
-}
-
-var Background = function (color, ambience) {
-    this.color = color;
-    this.ambience = ambience;
 };
 
-
-var Engine = function (options) {
+function Background (color, ambience) {
+    this.color = color;
+    this.ambience = ambience;
+}
+function Engine (options) {
     this.options = Object.extend({
         canvasHeight: 100,
         canvasWidth: 100,
@@ -438,9 +417,7 @@ var Engine = function (options) {
     this.options.canvasWidth /= this.options.pixelWidth;
     this.canvas = null;
     /* TODO: dynamically include other scripts */
-};
-
-
+}
 Engine.prototype = {
     setPixel: function (x, y, color) {
         var pxW, pxH;
@@ -585,7 +562,6 @@ Engine.prototype = {
         return color;
     }
 };
-
 
 function renderScene() {
     var scene = new Scene();
