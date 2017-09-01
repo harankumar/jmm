@@ -20,27 +20,27 @@
 var checkNumber;
 
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-
-// The following is a copy of parts of the Prototype JavaScript library:
-
-// Prototype JavaScript framework, version 1.5.0
-// (c) 2005-2007 Sam Stephenson
+// // ------------------------------------------------------------------------
+// // ------------------------------------------------------------------------
 //
-// Prototype is freely distributable under the terms of an MIT-style license.
-// For details, see the Prototype web site: http://prototype.conio.net/
-
-Object.extend = function (destination, source) {
-    for (var property in source) {
-        destination[property] = source[property];
-    }
-    return destination;
-};
-
-
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
+// // The following is a copy of parts of the Prototype JavaScript library:
+//
+// // Prototype JavaScript framework, version 1.5.0
+// // (c) 2005-2007 Sam Stephenson
+// //
+// // Prototype is freely distributable under the terms of an MIT-style license.
+// // For details, see the Prototype web site: http://prototype.conio.net/
+//
+// Object.extend = function (destination, source) {
+//     for (var property in source) {
+//         destination[property] = source[property];
+//     }
+//     return destination;
+// };
+//
+//
+// // ------------------------------------------------------------------------
+// // ------------------------------------------------------------------------
 
 // The rest of this file is the actual ray tracer written by Adam
 // Burmister. It's a concatenation of the following files:
@@ -400,8 +400,12 @@ function Background (color, ambience) {
     this.color = color;
     this.ambience = ambience;
 }
-function Engine (options) {
-    this.options = Object.extend({
+
+function Engine () {
+    // NOTE -- Object.extend was removed to JMM-ify this
+    // TODO -- add it back in
+    // ~HKK
+    this.options = {
         canvasHeight: 100,
         canvasWidth: 100,
         pixelWidth: 2,
@@ -411,7 +415,7 @@ function Engine (options) {
         renderHighlights: false,
         renderReflections: false,
         rayDepth: 2
-    }, options || {});
+    };
 
     this.options.canvasHeight /= this.options.pixelHeight;
     this.options.canvasWidth /= this.options.pixelWidth;
