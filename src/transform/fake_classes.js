@@ -15,8 +15,6 @@ function detectClasses(astRoot){
     if (astRoot.type === "NewExpression")
         return astRoot.callee.name;
 
-    console.log(astRoot.type)
-
     let ret = [];
     for (let child in astRoot){
         if (!astRoot.hasOwnProperty(child))
@@ -26,9 +24,55 @@ function detectClasses(astRoot){
             ret = ret.concat(detectClasses(astRoot[child]));
     }
 
-    console.log(ret);
-
     return Array.from(new Set(ret));
+}
+
+// Returns the list of classNames with built in classes removed
+function removeBuiltinClasses(classNames){
+    const builtin = new Set([
+        "Global",
+        "Object",
+        "Function",
+        "Array",
+        "String",
+        "Boolean",
+        "Number",
+        "Math",
+        "Date",
+        "RegExp",
+        "Error",
+        "JSON"
+    ]);
+
+    return classNames.filter((name) => !builtin.has(name));
+}
+
+// Returns the astNode of the constructor for className
+// If it can't find it, returns false
+// TODO -- handle other common OOP Constructor patterns
+function findConstructor(astRoot, className){
+    if (!astRoot)
+        return false;
+
+    if (astRoot.type === "FunctionDeclaration"
+        && astRoot.id.name === className){
+        // console.log(className, astRoot);
+        return astRoot;
+    }
+
+    for (let child in astRoot){
+        if (!astRoot.hasOwnProperty(child))
+            continue;
+
+        if (typeof astRoot[child] === "object"){
+            const temp = findConstructor(astRoot[child], className);
+            if (temp) {
+                return temp;
+            }
+        }
+    }
+
+    return false;
 }
 
 // Returns a list of fields
@@ -81,10 +125,12 @@ function buildFakeClass(className, fields, functionASTs, constructor){
 
 // Returns array [astWithoutClasses, RUST Code]
 function generateFakeClasses(astRoot){
-    const classNames = detectClasses(astRoot);
+    const classNames = removeBuiltinClasses(detectClasses(astRoot));
 
     let ret = "";
     for (let className of classNames){
+        const constructorAST = findConstructor(astRoot, className);
+        
         const fields = detectClassFields(astRoot, className);
         const functions = detectClassFunctions(astRoot, className);
         const constructor = generateConstructor(astRoot, className);
