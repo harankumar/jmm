@@ -7,14 +7,19 @@ JMM requires node, emscripten, and rust to be installed on your system.
 
 ## Completeness
 
-| **Types**            | Undefined  | Null      | Boolean  | String    | Number         | Object   | Reference  | List     | Completion |         |             |            |
+| Category | SubCategory |           |           |                |          |            |          |            |         |             |            |
 |----------------------|------------|-----------|----------|-----------|----------------|----------|------------|----------|------------|---------|-------------|------------|
-| **Type Conversion**  | Primitive  | Boolean   | Numbers  | String    | Object         | Callable |            |          |            |         |             |            |
-| **Expressions**      | Primary    | LHS       | Postfix  | Unary     | Multiplicative | Additive | Relational | Equality | Bitwise    | Logical | Conditional | Assignment |
-| **Statements**       | Block      | Variable  | If       | Iteration | Continue       | Break    | Return     | With     | Switch     |         |             |            |
-| **Function**         | Definition | Call      |          |           |                |          |            |          |            |         |             |            |
+| **Types**            | Undefined  | Null      | :interrobang: Boolean  | :interrobang: String    | :interrobang: Number         | Object   | Reference  | List     | Completion |         |             |            |
+| **Type Conversion**  | Primitive  | :interrobang: Boolean   | :interrobang: Numbers  | :interrobang: String    | Object         | Callable |            |          |            |         |             |            |
+| **Expressions**      | Primary    | LHS       | Postfix  | :interrobang: Unary     | :interrobang: Multiplicative | :interrobang: Additive | :interrobang: Relational | :interrobang: Equality | Bitwise    | :interrobang: Logical | :white_check_mark: Conditional | Assignment |
+| **Statements**       | Block      | :interrobang: Variable  | :interrobang: If       | :interrobang: Iteration | Continue       | :interrobang: Break    | :interrobang: Return     | With     | :interrobang: Switch     |         |             |            |
+| **Function**         | :interrobang: Definition | :interrobang: Call      |          |           |                |          |            |          |            |         |             |            |
 | **Built-in Objects** | Global     | Object    | Function | Array     | String         | Boolean  | Number     | Math     | Date       | RegExp  | Error       | JSON       |
 | **Errors**           | Throw      | Try-Catch |          |           |                |          |            |          |            |         |             |            |
+
+
+:interrobang: in the works
+:white_check_mark: completed
 
 ## Versions
 0.0 "Hello World"
