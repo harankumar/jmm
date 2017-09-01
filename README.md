@@ -5,6 +5,17 @@ It's super experimental, so don't use it in production (duh!).
 ## Dependencies
 JMM requires node, emscripten, and rust to be installed on your system.
 
+## Completeness
+
+| **Types**            | Undefined  | Null      | Boolean  | String    | Number         | Object   | Reference  | List     | Completion |         |             |            |
+|----------------------|------------|-----------|----------|-----------|----------------|----------|------------|----------|------------|---------|-------------|------------|
+| **Type Conversion**  | Primitive  | Boolean   | Numbers  | String    | Object         | Callable |            |          |            |         |             |            |
+| **Expressions**      | Primary    | LHS       | Postfix  | Unary     | Multiplicative | Additive | Relational | Equality | Bitwise    | Logical | Conditional | Assignment |
+| **Statements**       | Block      | Variable  | If       | Iteration | Continue       | Break    | Return     | With     | Switch     |         |             |            |
+| **Function**         | Definition | Call      |          |           |                |          |            |          |            |         |             |            |
+| **Built-in Objects** | Global     | Object    | Function | Array     | String         | Boolean  | Number     | Math     | Date       | RegExp  | Error       | JSON       |
+| **Errors**           | Throw      | Try-Catch |          |           |                |          |            |          |            |         |             |            |
+
 ## Versions
 0.0 "Hello World"
   Compiles a simple "Hello World" Program
