@@ -78,8 +78,33 @@ function findConstructor(astRoot, className){
 // Returns a list of fields
 // [{type: _____, name: ______}]
 // where type is the corresponding Rust Type
-function detectClassFields(astRoot, className){
+// TODO -- account for other Rust OOP Patterns
+// This code looks in the constructor body for any times that `this.x` is assigned to something.
+// It gives a list of all the "x's"
+// WARNING: Any weird block scoping stuff will cause weird errors
+function detectClassFields(astRoot){
+    if (!astRoot)
+        return [];
 
+    if (astRoot.type === "MemberExpression"
+        && astRoot.object.type === "ThisExpression"
+    ){
+        return [astRoot.property.name];
+    }
+
+    let ret = [];
+    for (let child in astRoot){
+        if (!astRoot.hasOwnProperty(child))
+            continue;
+
+        if (typeof astRoot[child] === "object"){
+            const temp = detectClassFields(astRoot[child]);
+            ret = ret.concat(temp);
+            // console.log(temp);
+        }
+    }
+
+    return ret;
 }
 
 // Returns rust code for constructor
@@ -144,11 +169,11 @@ function buildFakeClass(className, fields, functionASTs, constructor){
 
     return `
         struct ${className} {
-            ${constructor}
             ${rsStructFields}
         }
         
         impl ${className} {
+            ${constructor}
             ${rsFunctions}
         }
     `;
@@ -161,7 +186,7 @@ function generateFakeClasses(astRoot){
     let ret = "";
     for (let className of classNames){
         const constructorAST = findConstructor(astRoot, className);
-        // const fields = detectClassFields(astRoot, className);
+        const fields = detectClassFields(constructorAST);
         const functions = detectClassFunctions(astRoot, className);
         continue;
         const constructor = generateConstructor(astRoot, className);
