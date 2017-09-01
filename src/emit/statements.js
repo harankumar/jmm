@@ -9,9 +9,8 @@ module.exports = {
     walkDoWhileStatement: walkDoWhileStatement
 };
 
-const compiler = require('./compiler');
-const walk = compiler.walk;
-const type_infer = require('./type_infer').infer;
+const walk = require('./emit').walk;
+const type_infer = require('../type_infer').infer;
 
 function walkForStatement(astNode) {
     const init = walk(astNode.init);

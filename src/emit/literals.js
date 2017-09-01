@@ -2,9 +2,8 @@ module.exports = {
     walkLiteral: walkLiteral
 };
 
-const compiler = require('./compiler');
-const walk = compiler.walk;
-const type_infer = require('./type_infer').infer;
+const walk = require('./emit').walk;
+const type_infer = require('../type_infer').infer;
 
 function walkLiteral(astNode) {
     const val = astNode.value;

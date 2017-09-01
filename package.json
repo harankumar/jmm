@@ -21,6 +21,8 @@
     "acorn": "^5.1.1",
     "cli": "^1.0.1",
     "deasync": "^0.1.10",
+    "fs-path": "0.0.23",
     "tern": "^0.21.0"
   }
 }
+// TODO -- add repository field

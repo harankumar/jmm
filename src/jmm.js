@@ -1,6 +1,7 @@
 "use strict";
 
 const fs = require('fs');
+const fsPath = require('fs-path');
 const cli = require('cli');
 const execSync = require('child_process').execSync;
 const compiler = require('./compiler');
@@ -26,7 +27,7 @@ const program = fs.readFileSync(opts.js);
 
 const rs = compiler.compile(program);
 
-fs.writeFileSync(rsFile, rs);
+fsPath.writeFileSync(rsFile, rs);
 
 // TODO -- do this better
 if (opts.rustc)
