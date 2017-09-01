@@ -7,8 +7,8 @@ JMM requires node, emscripten, and rust to be installed on your system.
 
 ## Completeness
 
-| Category | SubCategory |           |           |                |          |            |          |            |         |             |            |
-|----------------------|------------|-----------|----------|-----------|----------------|----------|------------|----------|------------|---------|-------------|------------|
+| Category | SubCategory |            |           |                |           |                |          |            |          |             |            |             |            
+|------------------------|------------|-----------|----------------|-----------|----------------|----------|------------|----------|-------------|------------|-------------|------------|
 | **Types**            | Undefined  | Null      | :interrobang: Boolean  | :interrobang: String    | :interrobang: Number         | Object   | Reference  | List     | Completion |         |             |            |
 | **Type Conversion**  | Primitive  | :interrobang: Boolean   | :interrobang: Numbers  | :interrobang: String    | Object         | Callable |            |          |            |         |             |            |
 | **Expressions**      | Primary    | LHS       | Postfix  | :interrobang: Unary     | :interrobang: Multiplicative | :interrobang: Additive | :interrobang: Relational | :interrobang: Equality | Bitwise    | :interrobang: Logical | :white_check_mark: Conditional | Assignment |
