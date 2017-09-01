@@ -5,7 +5,7 @@ module.exports = {
 };
 
 const walk = require('./emit').walk;
-const type_infer = require('../type_infer').infer;
+const type_infer = require('../types').infer;
 
 function walkVariableDeclaration(astNode) {
     // TODO: handle const, var, let differently

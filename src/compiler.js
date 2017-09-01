@@ -6,7 +6,7 @@ const acorn = require('acorn');
 const rslibgen = require('./emit/rslib');
 const walk = require('./emit/emit').walk;
 
-const type_infer = require('./type_infer');
+const type_infer = require('./types');
 
 function compile(js) {
     const AST = acorn.parse(js);

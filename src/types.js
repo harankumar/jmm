@@ -33,3 +33,13 @@ function infer(astNode) {
 function registerFile(src) {
     tern.addFile("main", src);
 }
+
+function getCorrespondingRustType(tern_type){
+    switch(tern_type.type){
+        case "number":
+            return "f64";
+        case "string":
+            return "String"; // TODO -- change this to &str
+        case "boolean"
+    }
+}

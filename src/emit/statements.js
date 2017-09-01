@@ -10,7 +10,7 @@ module.exports = {
 };
 
 const walk = require('./emit').walk;
-const type_infer = require('../type_infer').infer;
+const type_infer = require('../types').infer;
 
 function walkForStatement(astNode) {
     const init = walk(astNode.init);
