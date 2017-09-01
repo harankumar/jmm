@@ -46,6 +46,6 @@ function walk(astNode) {
     if (astNode && astNode.type && walkers[astNode.type])
         return walkers[astNode.type](astNode);
     else {
-        console.log("JMM DOESN'T KNOW HOW TO HANDLE " + astNode);
+        console.log("EMITTER DOESN'T KNOW HOW TO HANDLE ", astNode);
     }
 }
