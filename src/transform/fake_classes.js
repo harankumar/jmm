@@ -97,8 +97,39 @@ function generateConstructor(astRoot, className, fields){
 }
 
 // Returns a list of functions
-// [astNode, astNode, ...]
+// [[name, astNode], [name, astNode], ...]
+// Detects code of the form:
+// CLASSNAME.prototype = {
+//      FUNCTIONNAME: function(...){...},
+//      ...
+// }
+// TODO -- handle other common OOP prototype patterns
 function detectClassFunctions(astRoot, className){
+    if (!astRoot)
+        return false;
+
+    if (astRoot.type === "AssignmentExpression"
+        && astRoot.left.type === "MemberExpression"
+        && astRoot.left.object.name === className
+        && astRoot.left.property.name === "prototype"
+        && astRoot.right.type === "ObjectExpression"
+        ){
+        return astRoot.right.properties.map((prop) => [prop.key, prop.value]);
+    }
+
+    for (let child in astRoot){
+        if (!astRoot.hasOwnProperty(child))
+            continue;
+
+        if (typeof astRoot[child] === "object"){
+            const temp = detectClassFunctions(astRoot[child], className);
+            if (temp) {
+                return temp;
+            }
+        }
+    }
+
+    return false;
 }
 
 // Returns RUST code
@@ -130,9 +161,9 @@ function generateFakeClasses(astRoot){
     let ret = "";
     for (let className of classNames){
         const constructorAST = findConstructor(astRoot, className);
-        
-        const fields = detectClassFields(astRoot, className);
+        // const fields = detectClassFields(astRoot, className);
         const functions = detectClassFunctions(astRoot, className);
+        continue;
         const constructor = generateConstructor(astRoot, className);
 
         ret += buildFakeClass(className, fields, functions) + "\n";
