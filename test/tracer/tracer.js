@@ -401,21 +401,23 @@ function Background (color, ambience) {
     this.ambience = ambience;
 }
 
+function EngineOptions(canvasHeight, canvasWidth, pixelWidth, pixelHeight, renderDiffuse, renderShadows, renderHighlights, renderReflections, rayDepth) {
+    this.canvasHeight = canvasHeight;
+    this.canvasWidth = canvasWidth;
+    this.pixelWidth = pixelWidth;
+    this.pixelHeight = pixelHeight;
+    this.renderDiffuse = renderDiffuse;
+    this.renderShadows = renderShadows;
+    this.renderHighlights = renderHighlights;
+    this.renderReflections = renderReflections;
+    this.rayDepth = rayDepth;
+}
+
 function Engine () {
     // NOTE -- Object.extend was removed to JMM-ify this
     // TODO -- add it back in
     // ~HKK
-    this.options = {
-        canvasHeight: 100,
-        canvasWidth: 100,
-        pixelWidth: 2,
-        pixelHeight: 2,
-        renderDiffuse: false,
-        renderShadows: false,
-        renderHighlights: false,
-        renderReflections: false,
-        rayDepth: 2
-    };
+    this.options = new EngineOptions(100, 100, 2, 2, false, false, false, false, 2);
 
     this.options.canvasHeight /= this.options.pixelHeight;
     this.options.canvasWidth /= this.options.pixelWidth;
@@ -660,4 +662,5 @@ function renderScene() {
     raytracer.renderScene(scene, null, 0);
 }
 
-Benchmark.report("Tracer", renderScene, renderScene);
+// Benchmark.report("Tracer", renderScene, renderScene);
+renderScene();
