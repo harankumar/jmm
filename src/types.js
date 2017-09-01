@@ -40,6 +40,7 @@ function getCorrespondingRustType(tern_type){
             return "f64";
         case "string":
             return "String"; // TODO -- change this to &str
-        case "boolean"
+        case "boolean":
+            return "bool";
     }
 }
