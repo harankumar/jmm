@@ -89,7 +89,7 @@ function detectClassFields(astRoot){
     if (astRoot.type === "MemberExpression"
         && astRoot.object.type === "ThisExpression"
     ){
-        return [astRoot.property.name];
+        return [[type_infer(astRoot.property), astRoot.property.name]];
     }
 
     let ret = [];
@@ -108,15 +108,16 @@ function detectClassFields(astRoot){
 }
 
 // Returns rust code for constructor
-function generateConstructor(astRoot, className, fields){
+function generateConstructor(className, fields, constructorAST){
     // TODO -- actually do stuff in the constructor
 
-    const rsFields = fields.map((field) => `${field.name}: ${field.type}`)
-        .join(", ");
+    const params = []; // TODO -- params of constructorAST
+    const constructoryBody = constructorAST.block.map(removeThis).map("walk");
 
     return `
-        new(${rsFields}){
-            ${className} {${fields.map((field) => field + ": " + field).join(", ")}}
+        new(){
+            let this = ${className} {${fields.map((field) => field + ": " + field).join(", ")}};
+            ${constructorBody};
         }
     `;
 }
@@ -185,11 +186,13 @@ function generateFakeClasses(astRoot){
 
     let ret = "";
     for (let className of classNames){
+        console.log(className)
         const constructorAST = findConstructor(astRoot, className);
         const fields = detectClassFields(constructorAST);
+        console.log(fields.filter((f) => f[0].type === "?"));
         const functions = detectClassFunctions(astRoot, className);
         continue;
-        const constructor = generateConstructor(astRoot, className);
+        const constructor = generateConstructor(className, fields, constructorAST);
 
         ret += buildFakeClass(className, fields, functions) + "\n";
     }
