@@ -1,4 +1,4 @@
-/**
+/*
  * The below code comes from Dart's ton80 benchmark suite.
  * It is slightly modified to function as JMM code.
  * */
@@ -206,7 +206,8 @@ function Scene () {
         new Vector(0, 0, 1),
         new Vector(0, 1, 0)
     );
-    this.shapes = [];
+    this.plane = null;
+    this.spheres = [];
     this.lights = [];
     this.background = new Background(new Color(0, 0, 0.5), 0.2);
 }
@@ -286,9 +287,16 @@ Chessboard.prototype = Object.create(BaseMaterial.prototype, {
     },
 });
 
+/**
+ * @param {Vector} pos
+ * @param {number} radius
+ * @param {Solid} material
+ * */
 function Sphere (pos, radius, material) {
     this.radius = radius;
     this.position = pos;
+
+    /** @type {Solid}*/
     this.material = material;
 }
 Sphere.prototype = {
@@ -363,6 +371,7 @@ function IntersectionInfo () {
     this.isHit = false;
     this.hitCount = 0;
     this.shape = null;
+    /** @type {Vector} */
     this.position = null;
     this.normal = null;
     this.color = null;
@@ -421,7 +430,7 @@ function Engine () {
 
     this.options.canvasHeight /= this.options.pixelHeight;
     this.options.canvasWidth /= this.options.pixelWidth;
-    this.canvas = null;
+    // this.canvas = null;
     /* TODO: dynamically include other scripts */
 }
 Engine.prototype = {
@@ -430,22 +439,22 @@ Engine.prototype = {
         pxW = this.options.pixelWidth;
         pxH = this.options.pixelHeight;
 
-        if (this.canvas) {
-            this.canvas.fillStyle = color.toString();
-            this.canvas.fillRect(x * pxW, y * pxH, pxW, pxH);
-        } else {
+        // if (this.canvas) {
+        //     this.canvas.fillStyle = color.toString();
+        //     this.canvas.fillRect(x * pxW, y * pxH, pxW, pxH);
+        // } else {
             checkNumber += color.brightness();
-        }
+        // }
     },
 
-    renderScene: function (scene, canvas) {
+    renderScene: function (scene) {
         checkNumber = 0;
         /* Get canvas */
-        if (canvas) {
-            this.canvas = canvas.getContext("2d");
-        } else {
-            this.canvas = null;
-        }
+        // if (canvas) {
+        //     this.canvas = canvas.getContext("2d");
+        // } else {
+        //     this.canvas = null;
+        // }
 
         var canvasHeight = this.options.canvasHeight;
         var canvasWidth = this.options.canvasWidth;
@@ -459,9 +468,10 @@ Engine.prototype = {
                 this.setPixel(x, y, color);
             }
         }
-        if (checkNumber !== 55545) {
-            throw new Error("Scene rendered incorrectly");
-        }
+        // TODO -- add back error checking?
+        // if (checkNumber !== 55545) {
+        //     throw new Error("Scene rendered incorrectly");
+        // }
     },
 
     getPixelColor: function (ray, scene) {
@@ -478,8 +488,18 @@ Engine.prototype = {
         var best = new IntersectionInfo();
         best.distance = 2000;
 
-        for (var i = 0; i < scene.shapes.length; i++) {
-            var shape = scene.shapes[i];
+        for (var i = 0; i < scene.spheres.length; i++) {
+            var shape = scene.spheres[i];
+            if (shape != exclude) {
+                var info = shape.intersect(ray);
+                if (info.isHit && info.distance >= 0 && info.distance < best.distance) {
+                    best = info;
+                    hits++;
+                }
+            }
+        }
+        for (var i = 0; i < 1; i++) {
+            var shape = scene.plane
             if (shape != exclude) {
                 var info = shape.intersect(ray);
                 if (info.isHit && info.distance >= 0 && info.distance < best.distance) {
@@ -620,9 +640,8 @@ function renderScene() {
         )
     );
 
-    scene.shapes.push(plane);
-    scene.shapes.push(sphere);
-    scene.shapes.push(sphere1);
+    scene.plane = plane;
+    scene.spheres = [sphere, sphere1];
 
     var light = new Light(
         new Vector(5, 10, -1),
@@ -635,8 +654,7 @@ function renderScene() {
         100
     );
 
-    scene.lights.push(light);
-    scene.lights.push(light1);
+    scene.lights = [light, light1];
 
     var imageWidth = 100; // $F('imageWidth');
     var imageHeight = 100; // $F('imageHeight');
@@ -647,19 +665,19 @@ function renderScene() {
     var renderReflections = true; // $F('renderReflections');
     var rayDepth = 2; //$F('rayDepth');
 
-    var raytracer = new Engine({
-        canvasWidth: imageWidth,
-        canvasHeight: imageHeight,
-        pixelWidth: pixelSize[0],
-        pixelHeight: pixelSize[1],
-        "renderDiffuse": renderDiffuse,
-        "renderHighlights": renderHighlights,
-        "renderShadows": renderShadows,
-        "renderReflections": renderReflections,
-        "rayDepth": rayDepth
-    });
+    var raytracer = new Engine(new EngineOptions(
+        imageWidth,
+        imageHeight,
+        pixelSize[0],
+        pixelSize[1],
+        renderDiffuse,
+        renderHighlights,
+        renderShadows,
+        renderReflections,
+        rayDepth
+));
 
-    raytracer.renderScene(scene, null, 0);
+    raytracer.renderScene(scene);
 }
 
 // Benchmark.report("Tracer", renderScene, renderScene);
