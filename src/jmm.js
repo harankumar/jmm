@@ -31,11 +31,11 @@ if (opts.out){
     rsFile = `${opts.out}/${stub}.rs`; // Should the .js stay in between?
     htmlFile = `${opts.out}/${stub}.html`;
 
-    program = fs.readFileSync(opts.js);
+    program = fs.readFileSync(opts.js, "utf8");
 } else {
     let names = fs.readdirSync("../test/");
     for (let name of names)
-        program += fs.readFileSync(`../test/${name}/${name}.js`) + "\n\n";
+        program += fs.readFileSync(`../test/${name}/${name}.js`, "utf8") + "\n\n";
     rsFile = "../test/all/build/all.rs";
     htmlFile = "../test/all/build/all.html";
 }
