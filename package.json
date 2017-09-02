@@ -23,6 +23,9 @@
     "deasync": "^0.1.10",
     "fs-path": "0.0.23",
     "tern": "^0.21.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/harankumar/jmm.git"
   }
 }
-// TODO -- add repository field
