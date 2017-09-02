@@ -3,7 +3,13 @@ module.exports = {
     registerFile: registerFile
 };
 
-const tern = new(require('tern').Server)({});
+require('tern/plugin/doc_comment');
+const tern = new (require('tern').Server)({
+    plugins: {
+        doc_comment: true
+    }
+
+});
 const deasync = require('deasync');
 
 function infer(astNode) {
@@ -18,7 +24,7 @@ function infer(astNode) {
 
     let done = false;
     let data;
-    tern.request(params, function(err, results) {
+    tern.request(params, function (err, results) {
         if (err)
             console.log("TERN DONE GOOFED " + err);
 
@@ -34,8 +40,8 @@ function registerFile(src) {
     tern.addFile("main", src);
 }
 
-function getCorrespondingRustType(tern_type){
-    switch(tern_type.type){
+function getCorrespondingRustType(tern_type) {
+    switch (tern_type.type) {
         case "number":
             return "f64";
         case "string":
