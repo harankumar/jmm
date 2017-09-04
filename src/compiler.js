@@ -18,9 +18,9 @@ function compile(js) {
     let rs_classes;
     [AST, rs_classes] = fake_classes.generateFakeClasses(AST);
 
-    // const generatedRust = walk(AST);
-    // console.log("GENERATED RUST\n\n" + generatedRust + "\n\n");
-    //
-    // const rslib = rslibgen();
-    // return rslib + rs_classes + walk(AST);
+    const generatedRust = walk(AST);
+    console.log("GENERATED RUST\n\n" + generatedRust + "\n\n");
+
+    const rslib = rslibgen();
+    return rslib + rs_classes + walk(AST);
 }

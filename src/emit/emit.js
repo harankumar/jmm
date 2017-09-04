@@ -8,6 +8,7 @@ const statements = require('./statements');
 const expressions = require('./expressions');
 const literals = require('./literals');
 const identifiers = require('./identifiers');
+const oop = require('./oop');
 
 const walkers = {
     "Program": walkProgram,
@@ -31,6 +32,7 @@ const walkers = {
     "AssignmentExpression": expressions.walkAssignmentExpression,
     "UpdateExpression": expressions.walkUpdateExpression,
     "ConditionalExpression": expressions.walkConditionalExpression,
+    "NewExpression": oop.walkNewExpression,
 
     "VariableDeclaration": declarations.walkVariableDeclaration,
     "VariableDeclarator": declarations.walkVariableDeclarator,

@@ -121,7 +121,7 @@ function removeThisInConstructor(astRoot) {
             "type": "Identifier",
             "start": 528,
             "end": 529,
-            "name": "x"
+            "name": "this"
         };
     }
 
@@ -141,7 +141,12 @@ function removeThisInConstructor(astRoot) {
 function generateConstructor(className, fields, constructorAST) {
     // TODO -- actually do stuff in the constructor
 
-    const params = ``; // TODO -- params of constructorAST
+    const params = constructorAST.params.map((param) => {
+        let type = types.toRust(type_infer(param));
+        let id = param.name;
+
+        return `${id}: ${type}`;
+    }).join(", "); // TODO -- params of constructorAST
 
     const default_vals = {
         "f64": "0.0",
@@ -161,7 +166,7 @@ function generateConstructor(className, fields, constructorAST) {
         .join(";\n");
 
     return dedent(`
-        new(${params}){
+        fn new(${params}) -> ${className} {
             let mut this = ${this_default};
             ${constructorBody};
             this
@@ -207,24 +212,24 @@ function detectClassFunctions(astRoot, className) {
 
 // Returns RUST code
 function buildFakeClass(className, fields, functionASTs, constructor) {
-    const rsStructFields = fields.map((field) => `${field.name}: ${field.type}`)
+    const rsStructFields = fields
+        .map((field) => `${field.name}: ${field.type}`)
         .join(",\n");
 
     // TODO -- functions require transformation!!
-    const rsFunctions = functionASTs.map(walk).join("\n\n");
+    // const rsFunctions = functionASTs.map(walk).join("\n\n");
 
     // TODO -- handle stuff like toString
 
-    return `
+    return dedent(`
         struct ${className} {
             ${rsStructFields}
         }
         
         impl ${className} {
             ${constructor}
-            ${rsFunctions}
         }
-    `;
+    `);
 }
 
 // Returns array [astWithoutClasses, RUST Code]
@@ -235,13 +240,16 @@ function generateFakeClasses(astRoot) {
     for (let className of classNames) {
         const constructorAST = findConstructor(astRoot, className);
         const fields = detectClassFields(constructorAST);
-        const functions = detectClassFunctions(astRoot, className);
+        const functions = detectClassFunctions(astRoot, className); // TODO -- put this stuff into fake class
         const constructor = generateConstructor(className, fields, constructorAST);
-        console.log(constructor);
-        continue;
 
-        ret += buildFakeClass(className, fields, functions) + "\n";
+        ret += buildFakeClass(className, fields, functions, constructor) + "\n";
+
     }
+
+    // TODO -- remove OOP stuff from AST
+    // Remove constructors
+    // Remove prototype
 
     return [astRoot, ret];
 }
