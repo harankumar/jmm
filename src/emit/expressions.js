@@ -111,7 +111,7 @@ function walkAssignmentExpression(astNode) {
     let assignment;
 
     if (astNode.operator === "+=" && type_infer(astNode.left).name === "string")
-        assignment = `${left} = [${left}, (${right}).to_string()].join("")`; // Seriously, we need some type inference up in here
+        assignment = `${left} = [${left}.to_str(), (${right}).to_str()].join("")`; // Seriously, we need some type inference up in here
     else
         assignment = `${left} ${op} ${right}`;
 
