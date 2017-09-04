@@ -5,10 +5,11 @@ module.exports = {
 const walk = require('../emit/emit').walk;
 const types = require('../types');
 const type_infer = types.infer;
+const dedent = require('dedent');
 
 // Returns a list of classes
 // ["Foo", "Bar", "Baz", etc.]
-function detectClasses(astRoot){
+function detectClasses(astRoot) {
     if (!astRoot)
         return [];
 
@@ -16,7 +17,7 @@ function detectClasses(astRoot){
         return astRoot.callee.name;
 
     let ret = [];
-    for (let child in astRoot){
+    for (let child in astRoot) {
         if (!astRoot.hasOwnProperty(child))
             continue;
 
@@ -28,7 +29,7 @@ function detectClasses(astRoot){
 }
 
 // Returns the list of classNames with built in classes removed
-function removeBuiltinClasses(classNames){
+function removeBuiltinClasses(classNames) {
     const builtin = new Set([
         "Global",
         "Object",
@@ -50,21 +51,21 @@ function removeBuiltinClasses(classNames){
 // Returns the astNode of the constructor for className
 // If it can't find it, returns false
 // TODO -- handle other common OOP Constructor patterns
-function findConstructor(astRoot, className){
+function findConstructor(astRoot, className) {
     if (!astRoot)
         return false;
 
     if (astRoot.type === "FunctionDeclaration"
-        && astRoot.id.name === className){
+        && astRoot.id.name === className) {
         // console.log(className, astRoot);
         return astRoot;
     }
 
-    for (let child in astRoot){
+    for (let child in astRoot) {
         if (!astRoot.hasOwnProperty(child))
             continue;
 
-        if (typeof astRoot[child] === "object"){
+        if (typeof astRoot[child] === "object") {
             const temp = findConstructor(astRoot[child], className);
             if (temp) {
                 return temp;
@@ -82,22 +83,25 @@ function findConstructor(astRoot, className){
 // This code looks in the constructor body for any times that `this.x` is assigned to something.
 // It gives a list of all the "x's"
 // WARNING: Any weird block scoping stuff will cause weird errors
-function detectClassFields(astRoot){
+function detectClassFields(astRoot) {
     if (!astRoot)
         return [];
 
     if (astRoot.type === "MemberExpression"
         && astRoot.object.type === "ThisExpression"
-    ){
-        return [[type_infer(astRoot.property), astRoot.property.name]];
+    ) {
+        return [{
+            type: types.toRust(type_infer(astRoot.property)),
+            name: astRoot.property.name
+        }];
     }
 
     let ret = [];
-    for (let child in astRoot){
+    for (let child in astRoot) {
         if (!astRoot.hasOwnProperty(child))
             continue;
 
-        if (typeof astRoot[child] === "object"){
+        if (typeof astRoot[child] === "object") {
             const temp = detectClassFields(astRoot[child]);
             ret = ret.concat(temp);
             // console.log(temp);
@@ -107,19 +111,62 @@ function detectClassFields(astRoot){
     return ret;
 }
 
+function removeThisInConstructor(astRoot) {
+    if (!astRoot)
+        return null;
+
+    if (astRoot.type === "ThisExpression"
+    ) {
+        return {
+            "type": "Identifier",
+            "start": 528,
+            "end": 529,
+            "name": "x"
+        };
+    }
+
+    for (let child in astRoot) {
+        if (!astRoot.hasOwnProperty(child))
+            continue;
+
+        if (typeof astRoot[child] === "object") {
+            astRoot[child] = removeThisInConstructor(astRoot[child]);
+        }
+    }
+
+    return astRoot;
+}
+
 // Returns rust code for constructor
-function generateConstructor(className, fields, constructorAST){
+function generateConstructor(className, fields, constructorAST) {
     // TODO -- actually do stuff in the constructor
 
-    const params = []; // TODO -- params of constructorAST
-    const constructoryBody = constructorAST.block.map(removeThis).map("walk");
+    const params = ``; // TODO -- params of constructorAST
 
-    return `
-        new(){
-            let this = ${className} {${fields.map((field) => field + ": " + field).join(", ")}};
+    const default_vals = {
+        "f64": "0.0",
+        "String": 'String::from("")',
+        "bool": "false"
+    };
+
+    console.log(fields)
+
+    const this_default = `${className} { ${fields.map((field) => {
+        return field.name + ": " + default_vals[field.type];
+    }).join(", ")} }`;
+
+    const constructorBody = constructorAST.body.body
+        .map(removeThisInConstructor)
+        .map(walk)
+        .join(";\n");
+
+    return dedent(`
+        new(${params}){
+            let mut this = ${this_default};
             ${constructorBody};
+            this
         }
-    `;
+    `);
 }
 
 // Returns a list of functions
@@ -130,7 +177,7 @@ function generateConstructor(className, fields, constructorAST){
 //      ...
 // }
 // TODO -- handle other common OOP prototype patterns
-function detectClassFunctions(astRoot, className){
+function detectClassFunctions(astRoot, className) {
     if (!astRoot)
         return false;
 
@@ -139,15 +186,15 @@ function detectClassFunctions(astRoot, className){
         && astRoot.left.object.name === className
         && astRoot.left.property.name === "prototype"
         && astRoot.right.type === "ObjectExpression"
-        ){
+    ) {
         return astRoot.right.properties.map((prop) => [prop.key, prop.value]);
     }
 
-    for (let child in astRoot){
+    for (let child in astRoot) {
         if (!astRoot.hasOwnProperty(child))
             continue;
 
-        if (typeof astRoot[child] === "object"){
+        if (typeof astRoot[child] === "object") {
             const temp = detectClassFunctions(astRoot[child], className);
             if (temp) {
                 return temp;
@@ -159,7 +206,7 @@ function detectClassFunctions(astRoot, className){
 }
 
 // Returns RUST code
-function buildFakeClass(className, fields, functionASTs, constructor){
+function buildFakeClass(className, fields, functionASTs, constructor) {
     const rsStructFields = fields.map((field) => `${field.name}: ${field.type}`)
         .join(",\n");
 
@@ -181,18 +228,17 @@ function buildFakeClass(className, fields, functionASTs, constructor){
 }
 
 // Returns array [astWithoutClasses, RUST Code]
-function generateFakeClasses(astRoot){
+function generateFakeClasses(astRoot) {
     const classNames = removeBuiltinClasses(detectClasses(astRoot));
 
     let ret = "";
-    for (let className of classNames){
-        console.log(className)
+    for (let className of classNames) {
         const constructorAST = findConstructor(astRoot, className);
         const fields = detectClassFields(constructorAST);
-        console.log(fields.filter((f) => f[0].type === "?"));
         const functions = detectClassFunctions(astRoot, className);
-        continue;
         const constructor = generateConstructor(className, fields, constructorAST);
+        console.log(constructor);
+        continue;
 
         ret += buildFakeClass(className, fields, functions) + "\n";
     }

@@ -1,6 +1,7 @@
 module.exports = {
     infer: infer,
-    registerFile: registerFile
+    registerFile: registerFile,
+    toRust: getCorrespondingRustType
 };
 
 require('tern/plugin/doc_comment');
