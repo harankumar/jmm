@@ -153,8 +153,6 @@ function generateConstructor(className, fields, constructorAST) {
         "bool": "false"
     };
 
-    console.log(fields)
-
     const this_default = `${className} { ${fields.map((field) => {
         return field.name + ": " + default_vals[field.type];
     }).join(", ")} }`;
@@ -191,7 +189,7 @@ function detectClassFunctions(astRoot, className) {
         && astRoot.left.property.name === "prototype"
         && astRoot.right.type === "ObjectExpression"
     ) {
-        return astRoot.right.properties.map((prop) => [prop.key, prop.value]);
+        return astRoot.right.properties.map((prop) => [prop.key.name, prop.value]);
     }
 
     for (let child in astRoot) {
@@ -209,6 +207,57 @@ function detectClassFunctions(astRoot, className) {
     return false;
 }
 
+function thisToSelf(astRoot) {
+    if (!astRoot)
+        return null;
+
+    if (astRoot.type === "ThisExpression"
+    ) {
+        return {
+            "type": "Identifier",
+            "start": 528,
+            "end": 529,
+            "name": "self"
+        };
+    }
+
+    for (let child in astRoot) {
+        if (!astRoot.hasOwnProperty(child))
+            continue;
+
+        if (typeof astRoot[child] === "object") {
+            astRoot[child] = thisToSelf(astRoot[child]);
+        }
+    }
+
+    return astRoot;
+}
+
+//
+function generateClassFunctions(name, AST) {
+    const params = AST.params.length > 0
+        ? ", " + AST.params.map((param) => {
+
+            let type = types.toRust(type_infer(param));
+            let id = param.name;
+
+            return `${id}: ${type}`;
+        }).join(", ")
+        : "";
+
+    const js_type = type_infer(AST).type.split("->").map((x) => x.trim());
+    const return_sig = js_type.length === 2
+        ? " -> " + types.toRust(js_type)
+        : "";
+    const body = AST.body.body.map(walk).join("\n"); // interior of the block statement
+
+    return dedent(`
+        fn ${name} (&mut self${params}) ${return_sig} {
+            ${body}
+        } 
+    `);
+}
+
 // Returns RUST code
 function buildFakeClass(className, fields, functionASTs, constructor) {
     const rsStructFields = fields
@@ -216,7 +265,8 @@ function buildFakeClass(className, fields, functionASTs, constructor) {
         .join(",\n");
 
     // TODO -- functions require transformation!!
-    // const rsFunctions = functionASTs.map(walk).join("\n\n");
+    const rsFunctions = functionASTs.map(thisToSelf).map((x) => generateClassFunctions(x[0], x[1])).join("\n\n");
+    console.log(rsFunctions)
 
     // TODO -- handle stuff like toString
 
@@ -227,19 +277,20 @@ function buildFakeClass(className, fields, functionASTs, constructor) {
         
         impl ${className} {
             ${constructor}
+            ${rsFunctions}
         }
     `);
 }
 
 // "Prune the tree"
 // Returns AST without any constructors or prototype stuff
-function removeOOP(astRoot, classNames){
+function removeOOP(astRoot, classNames) {
     classNames = new Set(classNames);
     return _removeOOP(astRoot, classNames)
 }
 
 // classNames is a Set
-function _removeOOP(astRoot, classNames){
+function _removeOOP(astRoot, classNames) {
     if (!astRoot)
         return true;
 
