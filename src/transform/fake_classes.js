@@ -104,7 +104,6 @@ function detectClassFields(astRoot) {
         if (typeof astRoot[child] === "object") {
             const temp = detectClassFields(astRoot[child]);
             ret = ret.concat(temp);
-            // console.log(temp);
         }
     }
 
@@ -232,6 +231,40 @@ function buildFakeClass(className, fields, functionASTs, constructor) {
     `);
 }
 
+// "Prune the tree"
+// Returns AST without any constructors or prototype stuff
+function removeOOP(astRoot, classNames){
+    classNames = new Set(classNames);
+    return _removeOOP(astRoot, classNames)
+}
+
+// classNames is a Set
+function _removeOOP(astRoot, classNames){
+    if (!astRoot)
+        return true;
+
+    if (astRoot.type === "FunctionDeclaration"
+        && classNames.has(astRoot.id.name)) {
+        return false;
+    }
+
+    // TODO -- remove prototype stuff
+
+    for (let child in astRoot) {
+        if (!astRoot.hasOwnProperty(child))
+            continue;
+
+        if (typeof astRoot[child] === "object") {
+            const temp = _removeOOP(astRoot[child], classNames);
+            if (!temp) {
+                delete astRoot[child];
+            }
+        }
+    }
+
+    return astRoot;
+}
+
 // Returns array [astWithoutClasses, RUST Code]
 function generateFakeClasses(astRoot) {
     const classNames = removeBuiltinClasses(detectClasses(astRoot));
@@ -247,9 +280,7 @@ function generateFakeClasses(astRoot) {
 
     }
 
-    // TODO -- remove OOP stuff from AST
-    // Remove constructors
-    // Remove prototype
+    astRoot = removeOOP(astRoot, classNames);
 
     return [astRoot, ret];
 }
