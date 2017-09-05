@@ -136,7 +136,7 @@ function walkMemberExpression(astNode) {
 
     if (type_infer(astNode.object).name === "Array") {
         if (property === "length") {
-            return `${object}.length()`
+            return `${object}.length()`;
         }
     }
 
