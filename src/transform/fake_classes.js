@@ -238,11 +238,11 @@ function generateClassFunctions(name, AST) {
     const params = AST.params.length > 0
         ? ", " + AST.params.map((param) => {
 
-            let type = types.toRust(type_infer(param));
-            let id = param.name;
+        let type = types.toRust(type_infer(param));
+        let id = param.name;
 
-            return `${id}: ${type}`;
-        }).join(", ")
+        return `${id}: ${type}`;
+    }).join(", ")
         : "";
 
     const js_type = type_infer(AST).type.split("->").map((x) => x.trim());
@@ -294,12 +294,16 @@ function _removeOOP(astRoot, classNames) {
     if (!astRoot)
         return true;
 
-    if (astRoot.type === "FunctionDeclaration"
-        && classNames.has(astRoot.id.name)) {
+    const isOOP = (astRoot.type === "FunctionDeclaration" && classNames.has(astRoot.id.name))
+        || (astRoot.type === "AssignmentExpression"
+            && astRoot.left.type === "MemberExpression"
+            && classNames.has(astRoot.left.object.name)
+            && astRoot.left.property.name === "prototype"
+            && astRoot.right.type === "ObjectExpression");
+
+    if (isOOP) {
         return false;
     }
-
-    // TODO -- remove prototype stuff
 
     for (let child in astRoot) {
         if (!astRoot.hasOwnProperty(child))
@@ -308,7 +312,7 @@ function _removeOOP(astRoot, classNames) {
         if (typeof astRoot[child] === "object") {
             const temp = _removeOOP(astRoot[child], classNames);
             if (!temp) {
-                delete astRoot[child];
+                astRoot[child] = {type: "JMM_REMOVED"};
             }
         }
     }

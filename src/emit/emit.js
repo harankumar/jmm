@@ -36,7 +36,9 @@ const walkers = {
 
     "VariableDeclaration": declarations.walkVariableDeclaration,
     "VariableDeclarator": declarations.walkVariableDeclarator,
-    "FunctionDeclaration": declarations.walkFunctionDeclaration
+    "FunctionDeclaration": declarations.walkFunctionDeclaration,
+
+    "JMM_REMOVED": () => ""
 };
 
 function walkProgram(astNode) {
