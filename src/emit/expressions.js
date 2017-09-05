@@ -6,7 +6,8 @@ module.exports = {
     walkUpdateExpression: walkUpdateExpression,
     walkAssignmentExpression: walkAssignmentExpression,
     walkMemberExpression: walkMemberExpression,
-    walkConditionalExpression: walkConditionalExpression
+    walkConditionalExpression: walkConditionalExpression,
+    walkArrayExpression: walkArrayExpression
 };
 
 const walk = require('./emit').walk;
@@ -78,7 +79,6 @@ function walkBinaryExpression(astNode) {
         throw `DOESN'T KNOW HOW TO HANDLE EXPRESSIONS THAT USE ${astNode.operator}`;
 }
 
-
 function walkLogicalExpression(astNode) {
     const left = walk(astNode.left);
     const right = walk(astNode.right);
@@ -133,6 +133,13 @@ function walkMemberExpression(astNode) {
     let object = walk(astNode.object);
     let property = walk(astNode.property);
 
+
+    if (type_infer(astNode.object).name === "Array") {
+        if (property === "length") {
+            return `${object}.length()`
+        }
+    }
+
     return `${object}.${property}`;
 }
 
@@ -142,4 +149,10 @@ function walkConditionalExpression(astNode) {
     const alternate = walk(astNode.alternate);
 
     return `if (${test}) {${consequent}} else {${alternate}}`
+}
+
+function walkArrayExpression(astNode) {
+    const elements = astNode.elements.map(walk).join(", ");
+
+    return `vec![${elements}]`;
 }

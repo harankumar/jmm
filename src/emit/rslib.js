@@ -3,6 +3,7 @@ const fs = require('fs');
 const imports = [
     // TYPES
     "nan",
+    "array",
     // TRAITS
     "jmm_js_object",
     "to_num",

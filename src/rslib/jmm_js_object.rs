@@ -69,3 +69,17 @@ impl JmmJsObject for NaN {
         return String::from("NaN");
     }
 }
+
+impl JmmJsObject for Vec<String> {
+    fn type_of(&self) -> String {
+        return String::from("object");  // TODO -- is this correct? FIXME
+    }
+
+    fn is_truthy(&self) -> bool {
+        return true;
+    }
+
+    fn to_str(&self) -> String {
+        ["[".to_string(), self.join(", "), "]".to_string()].join("")
+    }
+}
