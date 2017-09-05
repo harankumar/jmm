@@ -28,7 +28,7 @@ function infer(astNode) {
     let data;
     tern.request(params, function (err, results) {
         if (err)
-            throw `TERN DONE GOOFED ${err}`;
+            throw `TERN DONE GOOFED ${err} ${JSON.stringify(astNode)}`;
 
         data = results;
         done = true;
