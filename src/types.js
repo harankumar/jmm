@@ -42,7 +42,7 @@ function registerFile(src) {
     tern.addFile("main", src);
 }
 
-function getCorrespondingRustType (tern_obj) {
+function getCorrespondingRustType(tern_obj) {
     return toRustFromStr(tern_obj.type);
 }
 

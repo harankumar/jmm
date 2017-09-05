@@ -4,7 +4,6 @@
  * */
 
 
-
 // The ray tracer code in this file is written by Adam Burmister. It
 // is available in its original form from:
 //
@@ -62,11 +61,12 @@ var checkNumber;
 //   flog/engine.js
 
 
-function Color (r, g, b) {
+function Color(r, g, b) {
     this.red = r;
     this.green = g;
     this.blue = b;
 }
+
 Color.prototype = {
     add: function (c) {
         return new Color(this.red + c.red, this.green + c.green, this.blue + c.blue);
@@ -126,22 +126,24 @@ Color.prototype = {
     }
 };
 
-function Light (pos, color, intensity) {
+function Light(pos, color, intensity) {
     this.position = pos;
     this.color = color;
     this.intensity = (intensity ? intensity : 10.0);
 }
+
 Light.prototype = {
     toString: function () {
         return 'Light [' + this.position.x + ',' + this.position.y + ',' + this.position.z + ']';
     }
 };
 
-function Vector (x, y, z) {
+function Vector(x, y, z) {
     this.x = x;
     this.y = y;
     this.z = z;
 }
+
 Vector.prototype = {
     copy: function (vector) {
         this.x = vector.x;
@@ -190,17 +192,18 @@ Vector.prototype = {
     }
 };
 
-function Ray (pos, dir) {
+function Ray(pos, dir) {
     this.position = pos;
     this.direction = dir;
 }
+
 Ray.prototype = {
     toString: function () {
         return 'Ray [' + this.position + ',' + this.direction + ']';
     }
 };
 
-function Scene () {
+function Scene() {
     this.camera = new Camera(
         new Vector(0, 0, -5),
         new Vector(0, 0, 1),
@@ -212,13 +215,14 @@ function Scene () {
     this.background = new Background(new Color(0, 0, 0.5), 0.2);
 }
 
-function BaseMaterial (reflection, transparency, glass) {
+function BaseMaterial(reflection, transparency, glass) {
     this.gloss = glass;
     this.transparency = transparency;
     this.reflection = reflection;
     this.refraction = 0.50;
     this.hasTexture = false;
 }
+
 BaseMaterial.prototype = {
     wrapUp: function (t) {
         t = t % 2.0;
@@ -234,13 +238,14 @@ BaseMaterial.prototype = {
     }
 };
 
-function Solid (color, reflection, refraction, transparency, gloss) {
+function Solid(color, reflection, refraction, transparency, gloss) {
     this.color = color;
     this.reflection = reflection;
     this.transparency = transparency;
     this.gloss = gloss;
     this.hasTexture = false;
 }
+
 Solid.prototype = Object.create(BaseMaterial.prototype, {
     getColor: {
         value: function (u, v) {
@@ -257,7 +262,7 @@ Solid.prototype = Object.create(BaseMaterial.prototype, {
     },
 });
 
-function Chessboard (colorEven, colorOdd, reflection, transparency, gloss, density) {
+function Chessboard(colorEven, colorOdd, reflection, transparency, gloss, density) {
     this.colorEven = colorEven;
     this.colorOdd = colorOdd;
     this.reflection = reflection;
@@ -266,6 +271,7 @@ function Chessboard (colorEven, colorOdd, reflection, transparency, gloss, densi
     this.density = density;
     this.hasTexture = true;
 }
+
 Chessboard.prototype = Object.create(BaseMaterial.prototype, {
     getColor: {
         value: function (u, v) {
@@ -292,13 +298,14 @@ Chessboard.prototype = Object.create(BaseMaterial.prototype, {
  * @param {number} radius
  * @param {Solid} material
  * */
-function Sphere (pos, radius, material) {
+function Sphere(pos, radius, material) {
     this.radius = radius;
     this.position = pos;
 
     /** @type {Solid}*/
     this.material = material;
 }
+
 Sphere.prototype = {
     intersect: function (ray) {
         var info = new IntersectionInfo();
@@ -327,11 +334,12 @@ Sphere.prototype = {
     }
 };
 
-function Plane (pos, d, material) {
+function Plane(pos, d, material) {
     this.position = pos;
     this.d = d;
     this.material = material;
 }
+
 Plane.prototype = {
     intersect: function (ray) {
         var info = new IntersectionInfo();
@@ -366,7 +374,7 @@ Plane.prototype = {
     }
 };
 
-function IntersectionInfo () {
+function IntersectionInfo() {
     this.color = new Color(0, 0, 0);
     this.isHit = false;
     this.hitCount = 0;
@@ -377,19 +385,21 @@ function IntersectionInfo () {
     this.color = null;
     this.distance = null;
 }
+
 IntersectionInfo.prototype = {
     toString: function () {
         return 'Intersection [' + this.position + ']';
     }
 };
 
-function Camera (pos, lookAt, up) {
+function Camera(pos, lookAt, up) {
     this.position = pos;
     this.lookAt = lookAt;
     this.up = up;
     this.equator = lookAt.normalize().cross(this.up);
     this.screen = this.position.add(this.lookAt);
 }
+
 Camera.prototype = {
     getRay: function (vx, vy) {
         var pos = this.screen.subtract(
@@ -405,7 +415,7 @@ Camera.prototype = {
     }
 };
 
-function Background (color, ambience) {
+function Background(color, ambience) {
     this.color = color;
     this.ambience = ambience;
 }
@@ -422,7 +432,7 @@ function EngineOptions(canvasHeight, canvasWidth, pixelWidth, pixelHeight, rende
     this.rayDepth = rayDepth;
 }
 
-function Engine () {
+function Engine() {
     // NOTE -- Object.extend was removed to JMM-ify this
     // TODO -- add it back in
     // ~HKK
@@ -433,6 +443,7 @@ function Engine () {
     // this.canvas = null;
     /* TODO: dynamically include other scripts */
 }
+
 Engine.prototype = {
     setPixel: function (x, y, color) {
         var pxW, pxH;
@@ -443,7 +454,7 @@ Engine.prototype = {
         //     this.canvas.fillStyle = color.toString();
         //     this.canvas.fillRect(x * pxW, y * pxH, pxW, pxH);
         // } else {
-            checkNumber += color.brightness();
+        checkNumber += color.brightness();
         // }
     },
 
@@ -675,7 +686,7 @@ function renderScene() {
         renderShadows,
         renderReflections,
         rayDepth
-));
+    ));
 
     raytracer.renderScene(scene);
 }

@@ -8,7 +8,7 @@ module.exports = {
 
 const num_coercible = new Set(["number", "bool"]);
 
-function isNumCoercible(type){
+function isNumCoercible(type) {
     return num_coercible.has(type);
 }
 

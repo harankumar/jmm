@@ -16,9 +16,9 @@ const opts = cli.parse({
 });
 
 if (!opts.js && !opts.out) {
-    if (opts.all){
+    if (opts.all) {
         opts.out = `../test/all/build`
-    } else if (opts.test){
+    } else if (opts.test) {
         opts.js = `../test/${opts.test}/${opts.test}.js`;
         opts.out = `../test/${opts.test}/build`;
     }
@@ -26,7 +26,7 @@ if (!opts.js && !opts.out) {
 
 let program = "", rsFile, htmlFile;
 
-if (opts.out){
+if (opts.out) {
     // TODO -- make this cross OS compatible
     const stub = opts.js.split("/").slice(-1)[0].split(".")[0];
     rsFile = `${opts.out}/${stub}.rs`; // Should the .js stay in between?

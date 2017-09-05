@@ -18,9 +18,9 @@ const comparison = require('./comparison_operators');
 function walkCallExpression(astNode) {
     const callee = walk(astNode.callee);
     const args = astNode.arguments
-          .map(walk)
-          .map((arg) => `(${arg}).clone()`)
-          .join(", ");
+        .map(walk)
+        .map((arg) => `(${arg}).clone()`)
+        .join(", ");
 
     return `${callee}(${args})`;
 }
@@ -34,8 +34,8 @@ function walkUnaryExpression(astNode) {
 
     // Verify the rust equivalent exists
     switch (op) {
-    case "!":
-        return `js_not((${argument}).clone())`
+        case "!":
+            return `js_not((${argument}).clone())`
     }
 }
 
@@ -70,7 +70,6 @@ function walkBinaryExpression(astNode) {
 }
 
 
-
 function walkLogicalExpression(astNode) {
     const left = walk(astNode.left);
     const right = walk(astNode.right);
@@ -78,10 +77,10 @@ function walkLogicalExpression(astNode) {
 
     // Verify that the operator has a rust equivalent
     switch (op) {
-    case "&&":
-        return `js_and((${left}).clone(), (${right}).clone())`;
-    case "||":
-        return `js_or((${left}).clone(), (${right}).clone())`;
+        case "&&":
+            return `js_and((${left}).clone(), (${right}).clone())`;
+        case "||":
+            return `js_or((${left}).clone(), (${right}).clone())`;
     }
 }
 

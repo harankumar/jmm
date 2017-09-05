@@ -24,43 +24,44 @@ z = y % 1 === 3 ? 33.2 : 12131234;
 
 // LOOPY STUFF
 for (let k = 0; k < 100; k++) {
-  console.log(k);
+    console.log(k);
 }
 
 let i = 0;
 do {
-  i++;
+    i++;
 } while (i < 100);
 
 while (i < 150) {
-  i++;
+    i++;
 }
 
 // IF/ELSE
 if (i < 100)
-  console.log("<");
+    console.log("<");
 else if (i == 100)
-  console.log("==");
+    console.log("==");
 else
-  console.log(">");
+    console.log(">");
 
 // SWITCH STATEMENTS
 let x = 5;
 switch (x) {
-  case 5:
-  case 4:
-    console.log("It's 4 or 5");
-  case 3:
-    console.log("It's 3 or 4 or 5");
-    break;
-  case 2:
-    console.log("It's 2");
-  default:
-    console.log("Not 2, 3, 4, or 5");
+    case 5:
+    case 4:
+        console.log("It's 4 or 5");
+    case 3:
+        console.log("It's 3 or 4 or 5");
+        break;
+    case 2:
+        console.log("It's 2");
+    default:
+        console.log("Not 2, 3, 4, or 5");
 }
 
 switch (x) {
-  default: console.log("Hello World!");
+    default:
+        console.log("Hello World!");
 }
 
 switch (x) {
@@ -68,6 +69,6 @@ switch (x) {
 }
 
 switch (x) {
-  case 4:
-    console.log("blarg");
+    case 4:
+        console.log("blarg");
 }

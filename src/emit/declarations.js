@@ -30,7 +30,7 @@ function walkFunctionDeclaration(astNode) {
 
     const id = walk(astNode.id);
     const params = astNode.params.map(walk)
-          .map((x) => x + ":f64"); // TODO --- type infer!!!
+        .map((x) => x + ":f64"); // TODO --- type infer!!!
     const body = walk(astNode.body);
 
     return `fn ${id} (${params.join(", ")}) -> f64 {\n${body}};\n`;

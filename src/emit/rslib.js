@@ -12,7 +12,7 @@ const imports = [
     "console"
 ];
 
-module.exports = function() {
+module.exports = function () {
     let lib = "";
 
     for (let imp of Array.from(imports)) {
