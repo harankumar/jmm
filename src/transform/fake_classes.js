@@ -247,8 +247,9 @@ function generateClassFunctions(name, AST) {
 
     const js_type = type_infer(AST).type.split("->").map((x) => x.trim());
     const return_sig = js_type.length === 2
-        ? " -> " + types.toRust(js_type)
+        ? " -> " + types.toRustFromStr(js_type[1])
         : "";
+
     const body = AST.body.body.map(walk).join("\n"); // interior of the block statement
 
     return dedent(`

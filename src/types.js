@@ -1,7 +1,8 @@
 module.exports = {
     infer: infer,
     registerFile: registerFile,
-    toRust: getCorrespondingRustType
+    toRust: getCorrespondingRustType,
+    toRustFromStr: toRustFromStr
 };
 
 require('tern/plugin/doc_comment');
@@ -41,8 +42,12 @@ function registerFile(src) {
     tern.addFile("main", src);
 }
 
-function getCorrespondingRustType(tern_type) {
-    switch (tern_type.type) {
+function getCorrespondingRustType (tern_obj) {
+    return toRustFromStr(tern_obj.type);
+}
+
+function toRustFromStr(tern_type) {
+    switch (tern_type) {
         case "number":
             return "f64";
         case "string":
