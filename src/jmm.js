@@ -11,7 +11,8 @@ const opts = cli.parse({
     js: ["j", "A Javascript Input File", "file", null],
     out: ["o", "Output directory", "file", null],
     rustc: ["r", "Call rustc?", true, false],
-    all: ["a", "Run all tests?", true, false]
+    all: ["a", "Run all tests?", true, false],
+    verbose: ["v", "Show AST and generated rust?", true, false]
 });
 
 if (!opts.js && !opts.out) {
@@ -40,7 +41,7 @@ if (opts.out){
     htmlFile = "../test/all/build/all.html";
 }
 
-const rs = compiler.compile(program);
+const rs = compiler.compile(program, opts.verbose);
 
 fsPath.writeFileSync(rsFile, rs);
 
