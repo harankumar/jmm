@@ -18,6 +18,10 @@ function compile(js, verbose) {
 
     let rs_classes;
     [AST, rs_classes] = fake_classes.generateFakeClasses(AST);
+    if (verbose){
+        console.log("AST without OOP\n\n" + JSON.stringify(AST, null, 2) + "\n\n");
+        console.log("RUST CLASSES\n\n" + rs_classes + "\n\n");
+    }
 
     const generatedRust = walk(AST);
     if (verbose)
