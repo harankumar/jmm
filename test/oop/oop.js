@@ -20,6 +20,9 @@ Foo.prototype = {
     },
     quork: function () {
         console.log(this.a);
+    },
+    zork: function (msg) {
+        return this.a + msg;
     }
 };
 
@@ -29,3 +32,5 @@ y.beep(); // BEEP: boop
 x.quork(); // boo
 x.blork();
 x.quork(); // boofoo
+let p = x.zork("memes");
+console.log(p); // boofoomemes
