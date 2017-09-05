@@ -66,7 +66,7 @@ function walkBinaryExpression(astNode) {
     if (builder)
         return builder(left, right, left_type, right_type);
     else
-        console.log("DOESN'T KNOW HOW TO HANDLE " + astNode.operator);
+        throw `DOESN'T KNOW HOW TO HANDLE EXPRESSIONS THAT USE ${astNode.operator}`;
 }
 
 

@@ -267,7 +267,6 @@ function buildFakeClass(className, fields, functionASTs, constructor) {
 
     // TODO -- functions require transformation!!
     const rsFunctions = functionASTs.map(thisToSelf).map((x) => generateClassFunctions(x[0], x[1])).join("\n\n");
-    console.log(rsFunctions)
 
     // TODO -- handle stuff like toString
 
