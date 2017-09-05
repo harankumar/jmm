@@ -14,6 +14,7 @@ const type_infer = require('../types').infer;
 
 const arithmetic = require('./arithmetic_operators');
 const comparison = require('./comparison_operators');
+const bitwise = require('./bitwise_operators');
 
 function walkCallExpression(astNode) {
     const callee = walk(astNode.callee);
@@ -28,6 +29,7 @@ function walkCallExpression(astNode) {
 function walkUnaryExpression(astNode) {
     // TODO -- FIX ME!!
     // Explicitly handle every possible operator
+    // TODO -- bitwise operators
 
     const argument = walk(astNode.argument);
     const op = astNode.operator;
@@ -54,7 +56,14 @@ function walkBinaryExpression(astNode) {
         "===": comparison.buildStrictEquality,
         "==": comparison.buildEquality,
         "!==": comparison.buildStrictInequality,
-        "!=": comparison.buildInequality
+        "!=": comparison.buildInequality,
+        // BITWISE
+        "&": bitwise.buildAND,
+        "|": bitwise.buildOR,
+        "^": bitwise.buildXOR,
+        "<<": bitwise.buildLeftShift,
+        ">>": bitwise.buildRightShift,
+        ">>>": bitwise.buildZeroFillRightShift
     };
 
     const left_type = type_infer(astNode.left).type;
