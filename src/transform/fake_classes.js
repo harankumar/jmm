@@ -110,32 +110,6 @@ function detectClassFields(astRoot) {
     return ret;
 }
 
-function removeThisInConstructor(astRoot) {
-    if (!astRoot)
-        return null;
-
-    if (astRoot.type === "ThisExpression"
-    ) {
-        return {
-            "type": "Identifier",
-            "start": 528,
-            "end": 529,
-            "name": "this"
-        };
-    }
-
-    for (let child in astRoot) {
-        if (!astRoot.hasOwnProperty(child))
-            continue;
-
-        if (typeof astRoot[child] === "object") {
-            astRoot[child] = removeThisInConstructor(astRoot[child]);
-        }
-    }
-
-    return astRoot;
-}
-
 // Returns rust code for constructor
 function generateConstructor(className, fields, constructorAST) {
     // TODO -- actually do stuff in the constructor
@@ -158,7 +132,6 @@ function generateConstructor(className, fields, constructorAST) {
     }).join(", ")} }`;
 
     const constructorBody = constructorAST.body.body
-        .map(removeThisInConstructor)
         .map(walk)
         .join(";\n");
 

@@ -7,7 +7,8 @@ module.exports = {
     walkAssignmentExpression: walkAssignmentExpression,
     walkMemberExpression: walkMemberExpression,
     walkConditionalExpression: walkConditionalExpression,
-    walkArrayExpression: walkArrayExpression
+    walkArrayExpression: walkArrayExpression,
+    walkThisExpression: walkThisExpression
 };
 
 const walk = require('./emit').walk;
@@ -155,4 +156,10 @@ function walkArrayExpression(astNode) {
     const elements = astNode.elements.map(walk).join(", ");
 
     return `vec![${elements}]`;
+}
+
+function walkThisExpression(astNode) {
+    // TODO -- should either be self or this, depending on context -- FIXME!!!
+
+    return "this";
 }

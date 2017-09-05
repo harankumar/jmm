@@ -34,6 +34,7 @@ const walkers = {
     "ConditionalExpression": expressions.walkConditionalExpression,
     "NewExpression": oop.walkNewExpression,
     "ArrayExpression": expressions.walkArrayExpression,
+    "ThisExpression": expressions.walkThisExpression,
 
     "VariableDeclaration": declarations.walkVariableDeclaration,
     "VariableDeclarator": declarations.walkVariableDeclarator,
