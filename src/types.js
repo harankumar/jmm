@@ -5,7 +5,9 @@ module.exports = {
     toRustFromStr: toRustFromStr
 };
 
+const mangle = require('./mangle').mangleIdentifier;
 require('tern/plugin/doc_comment');
+
 const tern = new (require('tern').Server)({
     plugins: {
         doc_comment: true
@@ -54,5 +56,7 @@ function toRustFromStr(tern_type) {
             return "String"; // TODO -- change this to &str
         case "boolean":
             return "bool";
+        default:
+            return mangle(tern_type);
     }
 }

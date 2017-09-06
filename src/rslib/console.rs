@@ -1,9 +1,9 @@
 struct Console {}
 
 impl Console {
-    fn log<T: JmmJsObject>(&self, x: T) {
+    fn __js__log<T: JmmJsObject>(&self, x: T) {
         println!("{}", x.to_str());
     }
 }
 
-static console: Console = Console {};
+static __js__console: Console = Console {};

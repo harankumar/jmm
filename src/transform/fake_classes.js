@@ -6,6 +6,7 @@ const walk = require('../emit/emit').walk;
 const types = require('../types');
 const type_infer = types.infer;
 const dedent = require('dedent');
+const mangle = require('../mangle').mangleIdentifier;
 
 // Returns a list of classes
 // ["Foo", "Bar", "Baz", etc.]
@@ -136,7 +137,7 @@ function generateConstructor(className, fields, constructorAST) {
         .join(";\n");
 
     return dedent(`
-        fn new(${params}) -> ${className} {
+        fn new(${params}) -> ${mangle(className)} {
             let mut this = ${this_default};
             ${constructorBody};
             this
@@ -186,7 +187,7 @@ function thisToSelf(astRoot) {
 
     if (astRoot.type === "ThisExpression"
     ) {
-        return {
+        return { // TODO -- FIXME!!
             "type": "Identifier",
             "start": 528,
             "end": 529,
@@ -212,7 +213,7 @@ function generateClassFunctions(name, AST) {
         ? ", " + AST.params.map((param) => {
 
         let type = types.toRust(type_infer(param));
-        let id = param.name;
+        let id = mangle(param.name);
 
         return `${id}: ${type}`;
     }).join(", ")
@@ -226,7 +227,7 @@ function generateClassFunctions(name, AST) {
     const body = AST.body.body.map(walk).join("\n"); // interior of the block statement
 
     return dedent(`
-        fn ${name} (&mut self${params}) ${return_sig} {
+        fn ${mangle(name)} (&mut self${params}) ${return_sig} {
             ${body}
         } 
     `);
@@ -246,11 +247,11 @@ function buildFakeClass(className, fields, functionASTs, constructor) {
     // TODO -- handle stuff like toString
 
     return dedent(`
-        struct ${className} {
+        struct ${mangle(className)} {
             ${rsStructFields}
         }
         
-        impl ${className} {
+        impl ${mangle(className)} {
             ${constructor}
             ${rsFunctions}
         }

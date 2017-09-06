@@ -6,6 +6,10 @@ function fib(n) {
     return fib(n - 1) + fib(n - 2);
 }
 
+/**
+ * @param {number} n
+ * @returns {number}
+ * */
 function fib_switch(n) {
     switch (n) {
         case 0:
@@ -31,6 +35,8 @@ function better_fib(n) {
     }
     return b;
 }
+
+// TODO -- add non-recursive formula for fibonacci sequence
 
 console.log(better_fib(40));
 console.log(fib_switch(40));

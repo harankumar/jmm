@@ -29,7 +29,7 @@ let program = "", rsFile, htmlFile;
 if (opts.out) {
     // TODO -- make this cross OS compatible
     const stub = opts.js.split("/").slice(-1)[0].split(".")[0];
-    rsFile = `${opts.out}/${stub}.rs`; // Should the .js stay in between?
+    rsFile = `${opts.out}/${stub}.rs`; // Should the .js stay in between? -- TODO
     htmlFile = `${opts.out}/${stub}.html`;
 
     program = fs.readFileSync(opts.js, "utf8");
