@@ -93,7 +93,7 @@ function detectClassFields(astRoot) {
     ) {
         return [{
             type: types.toRust(type_infer(astRoot.property)),
-            name: astRoot.property.name
+            name: mangle(astRoot.property.name)
         }];
     }
 
@@ -117,7 +117,7 @@ function generateConstructor(className, fields, constructorAST) {
 
     const params = constructorAST.params.map((param) => {
         let type = types.toRust(type_infer(param));
-        let id = param.name;
+        let id = mangle(param.name);
 
         return `${id}: ${type}`;
     }).join(", "); // TODO -- params of constructorAST
@@ -128,7 +128,7 @@ function generateConstructor(className, fields, constructorAST) {
         "bool": "false"
     };
 
-    const this_default = `${className} { ${fields.map((field) => {
+    const this_default = `${mangle(className)} { ${fields.map((field) => {
         return field.name + ": " + default_vals[field.type];
     }).join(", ")} }`;
 
@@ -187,12 +187,8 @@ function thisToSelf(astRoot) {
 
     if (astRoot.type === "ThisExpression"
     ) {
-        return { // TODO -- FIXME!!
-            "type": "Identifier",
-            "start": 528,
-            "end": 529,
-            "name": "self"
-        };
+        astRoot["JMM_THIS_CONVERT"] = "self";
+        return astRoot;
     }
 
     for (let child in astRoot) {

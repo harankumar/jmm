@@ -160,6 +160,8 @@ function walkArrayExpression(astNode) {
 
 function walkThisExpression(astNode) {
     // TODO -- should either be self or this, depending on context -- FIXME!!!
-
-    return "this";
+    if (astNode["JMM_THIS_CONVERT"] === "self")
+        return "self";
+    else
+        return "this";
 }
