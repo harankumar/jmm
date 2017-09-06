@@ -38,7 +38,7 @@ function walkDoWhileStatement(astNode) {
 function walkIfStatement(astNode) {
     const test = walk(astNode.test);
     const consequent = walk(astNode.consequent);
-    const alternate = walk(astNode.alternate);
+    const alternate = astNode.alternate ? walk(astNode.alternate) : "";
 
     if (alternate)
         return `if(${test})\n{${consequent}} \nelse\n {${alternate}}\n`;
