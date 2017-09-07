@@ -1,11 +1,16 @@
 // TODO -- make this generic
 
-trait Array {
-    fn length(&self) -> f64;
+trait __js__Array {
+    fn __js__length(&self) -> f64;
+    fn __js__push(&mut self, val: String) -> f64;
 }
 
-impl Array for Vec<String> {
-    fn length(&self) -> f64 {
+impl __js__Array for Vec<String> {
+    fn __js__length(&self) -> f64 {
+        self.len() as f64
+    }
+    fn __js__push(&mut self, val: String) -> f64 {
+        self.push(val);
         self.len() as f64
     }
 }

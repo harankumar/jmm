@@ -135,10 +135,10 @@ function walkMemberExpression(astNode) {
     let object = walk(astNode.object);
     let property = walk(astNode.property);
 
-
+    // TODO -- this is a hot mess, FIXME!
     if (type_infer(astNode.object).name === "Array") {
-        if (property === "length") {
-            return `${object}.length()`;
+        if (property === "__js__length") {
+            return `${object}.__js__length()`;
         }
     }
 
