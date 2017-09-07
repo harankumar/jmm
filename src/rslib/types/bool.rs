@@ -1,12 +1,12 @@
 impl TypeOf for bool {
     fn type_of(&self) -> String {
-        return String::from("boolean");
+        String::from("boolean")
     }
 }
 
 impl ToBool for bool {
     fn is_truthy(&self) -> bool {
-        return *self;
+        *self
     }
 }
 

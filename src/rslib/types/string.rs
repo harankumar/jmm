@@ -1,6 +1,6 @@
 impl TypeOf for String {
-    fn type_of(&self) -> String {
-        return String::from("string");
+    fn type_of(&self) -> String{
+        String::from("string")
     }
 }
 
@@ -15,6 +15,6 @@ impl ToBool for String {
 
 impl ToString for String {
     fn to_str(&self) -> String {
-        return (*self).clone();
+        (*self).clone()
     }
 }

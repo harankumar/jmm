@@ -15,5 +15,5 @@ fn __jmm__or<T: ToBool>(a: T, b: T) -> T {
 }
 
 fn __jmm__not<T: ToBool>(a: T) -> bool {
-    return !a.is_truthy();
+    !a.is_truthy()
 }
