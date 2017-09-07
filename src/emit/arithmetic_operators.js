@@ -3,6 +3,7 @@ module.exports = {
     buildSub: buildSub,
     buildMult: buildTimes,
     buildDiv: buildDiv,
+    buildModulo: buildMod,
     isNumCoercible: isNumCoercible
 };
 
@@ -38,6 +39,13 @@ function buildDiv(left, right, left_type, right_type) {
     // TODO -- handle Infinity
     if (num_coercible.has(left_type) && num_coercible.has(right_type))
         return `((${left}).to_num() / (${right}).to_num())`;
+    else
+        return "__js__NaN";
+}
+
+function buildMod(left, right, left_type, right_type){
+    if (num_coercible.has(left_type) && num_coercible.has(right_type))
+        return `((${left}).to_num() % (${right}).to_num())`;
     else
         return "__js__NaN";
 }

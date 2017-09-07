@@ -50,6 +50,7 @@ function walkBinaryExpression(astNode) {
         "-": arithmetic.buildSub,
         "*": arithmetic.buildMult,
         "/": arithmetic.buildDiv,
+        "%": arithmetic.buildModulo,
         // COMPARISON
         "<": comparison.buildLessThan,
         "<=": comparison.buildLessThanOrEqual,
