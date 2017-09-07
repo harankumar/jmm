@@ -57,7 +57,9 @@ function buildEquality(left, right, left_type, right_type) {
     if (right_type === "string")
         return `((${right}) == (${left}).to_str())`;
     else
-        throw `Doesn't know how to determine equality of ${left_type} and ${right_type}`;
+        // TODO -- find a more elegant solution to this:
+        return "false";
+        // throw `Doesn't know how to determine equality of ${left_type} and ${right_type}`;
 }
 
 function buildStrictInequality(left, right, left_type, right_type) {
@@ -75,5 +77,6 @@ function buildInequality(left, right, left_type, right_type) {
     if (right_type === "string")
         return `((${right}) != (${left}).to_str())`;
     else
-        throw `Doesn't know how to determine equality of ${left_type} and ${right_type}`;
+        return "false";
+        // throw `Doesn't know how to determine equality of ${left_type} and ${right_type}`;
 }
