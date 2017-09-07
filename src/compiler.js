@@ -3,7 +3,7 @@ module.exports = {
 };
 
 const acorn = require('acorn');
-const rslibgen = require('./emit/rslib');
+const rslibgen = require('./rslib/load');
 const walk = require('./emit/emit').walk;
 const fake_classes = require('./transform/fake_classes');
 
