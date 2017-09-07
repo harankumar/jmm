@@ -1,16 +1,23 @@
 const fs = require('fs');
 
+// TODO -- nest this stuff
+
 const imports = [
-    // TYPES
-    "nan",
-    "array",
     // TRAITS
-    "jmm_js_object",
-    "to_num",
+    "traits/to_bool",
+    "traits/to_num",
+    "traits/to_string",
+    "traits/type_of",
+    // TYPES
+    "types/bool",
+    "types/js_array",
+    "types/js_nan",
+    "types/number",
+    "types/string",
     // OPERATORS
-    "logical_operators",
-    // STATIC VARIABLES
-    "console"
+    "operators/logical",
+    // GLOBALS
+    "globals/console"
 ];
 
 module.exports = function () {

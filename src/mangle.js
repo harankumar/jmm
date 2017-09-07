@@ -2,6 +2,6 @@ module.exports = {
     mangleIdentifier
 };
 
-function mangleIdentifier(identifier){
+function mangleIdentifier(identifier) {
     return "__js__" + identifier;
 }
