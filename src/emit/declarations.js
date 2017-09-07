@@ -4,8 +4,9 @@ module.exports = {
     walkFunctionDeclaration: walkFunctionDeclaration
 };
 
+const mangle = require('../mangle').mangleIdentifier;
 const walk = require('./emit').walk;
-const type_infer = require('../types').infer;
+const types = require('../types');
 
 function walkVariableDeclaration(astNode) {
     // TODO: handle const, var, let differently
@@ -29,9 +30,18 @@ function walkFunctionDeclaration(astNode) {
     // TODO -- handle expressions, generators
 
     const id = walk(astNode.id);
-    const params = astNode.params.map(walk)
-        .map((x) => x + ":f64"); // TODO --- type infer!!!
+    const params = astNode.params
+        .map((param) => {
+            const name = mangle(param.name);
+            const type = types.toRust(types.infer(param));
+            return `${name}: ${type}`
+        }); // TODO --- type infer!!!
     const body = walk(astNode.body);
 
-    return `fn ${id} (${params.join(", ")}) -> f64 {\n${body}};\n`;
+    const js_type = types.infer(astNode.id).type.split("->").map((x) => x.trim());
+    const return_sig = js_type.length === 2
+        ? " -> " + types.toRustFromStr(js_type[1])
+        : "";
+
+    return `fn ${id} (${params.join(", ")}) ${return_sig} {\n${body}};\n`;
 }

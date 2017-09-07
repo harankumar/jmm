@@ -205,6 +205,8 @@ function thisToSelf(astRoot) {
 
 //
 function generateClassFunctions(name, AST) {
+    // TODO -- move this stuff into walkFunctionDeclaration
+
     const params = AST.params.length > 0
         ? ", " + AST.params.map((param) => {
 
