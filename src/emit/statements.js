@@ -18,7 +18,7 @@ function walkForStatement(astNode) {
     const update = walk(astNode.update);
     const body = walk(astNode.body);
 
-    return `${init};\n while(${test}){\n${body}\n${update};\n}`;
+    return `{${init};\n while(${test}){\n${body}\n${update};\n}}`;
 }
 
 function walkWhileStatement(astNode) {
