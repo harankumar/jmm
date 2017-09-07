@@ -39,7 +39,7 @@ function walkUnaryExpression(astNode) {
     // Verify the rust equivalent exists
     switch (op) {
         case "!":
-            return `js_not((${argument}).clone())`
+            return `__jmm__not((${argument}).clone())`
     }
 }
 
@@ -88,9 +88,9 @@ function walkLogicalExpression(astNode) {
     // Verify that the operator has a rust equivalent
     switch (op) {
         case "&&":
-            return `js_and((${left}).clone(), (${right}).clone())`;
+            return `__jmm__and((${left}).clone(), (${right}).clone())`;
         case "||":
-            return `js_or((${left}).clone(), (${right}).clone())`;
+            return `__jmm__or((${left}).clone(), (${right}).clone())`;
     }
 }
 
