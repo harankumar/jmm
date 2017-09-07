@@ -17,13 +17,13 @@ impl __js__Array for Vec<String> {
 
 impl TypeOf for Vec<String> {
     fn type_of(&self) -> String {
-        return String::from("object");  // TODO -- is this correct? FIXME
+        String::from("object")  // TODO -- is this correct? FIXME
     }
 }
 
 impl ToBool for Vec<String> {
     fn is_truthy(&self) -> bool {
-        return true;
+        true
     }
 }
 
