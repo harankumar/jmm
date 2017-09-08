@@ -1,6 +1,6 @@
 "use strict";
 
-const fs = require('fs');
+const fs = require('fs-extra');
 const fsPath = require('fs-path');
 const cli = require('commander');
 const execSync = require('child_process').execSync;
@@ -29,6 +29,8 @@ const rsFile = `${cli.out}/${stub}.rs`; // Should the .js stay in between? -- TO
 const htmlFile = `${cli.out}/${stub}.html`;
 
 const rs = compiler.compile(program, cli.verbose);
+
+fs.emptyDirSync(cli.out);
 
 fsPath.writeFileSync(rsFile, rs);
 
