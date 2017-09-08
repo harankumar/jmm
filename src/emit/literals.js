@@ -3,7 +3,7 @@ module.exports = {
 };
 
 const walk = require('./emit').walk;
-const type_infer = require('../types').infer;
+const type_infer = require('../utils/types').infer;
 
 function walkLiteral(astNode) {
     const val = astNode.value;

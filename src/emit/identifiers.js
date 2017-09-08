@@ -2,7 +2,7 @@ module.exports = {
     walkIdentifier: walkIdentifier
 };
 
-const mangle = require('../mangle').mangleIdentifier;
+const mangle = require('../utils/mangle').mangleIdentifier;
 
 function walkIdentifier(astNode) {
     switch (astNode.name) {

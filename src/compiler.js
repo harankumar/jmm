@@ -7,7 +7,7 @@ const rslibgen = require('./rslib/load');
 const walk = require('./emit/emit').walk;
 const fake_classes = require('./transform/fake_classes');
 
-const type_infer = require('./types');
+const type_infer = require('./utils/types');
 
 function compile(js, verbose) {
     let AST = acorn.parse(js);

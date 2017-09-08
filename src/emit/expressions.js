@@ -12,7 +12,7 @@ module.exports = {
 };
 
 const walk = require('./emit').walk;
-const types = require('../types');
+const types = require('../utils/types');
 
 const arithmetic = require('./arithmetic_operators');
 const comparison = require('./comparison_operators');

@@ -4,9 +4,9 @@ module.exports = {
     walkFunctionDeclaration: walkFunctionDeclaration
 };
 
-const mangle = require('../mangle').mangleIdentifier;
+const mangle = require('../utils/mangle').mangleIdentifier;
 const walk = require('./emit').walk;
-const types = require('../types');
+const types = require('../utils/types');
 
 function walkVariableDeclaration(astNode) {
     // TODO: handle const, var, let differently

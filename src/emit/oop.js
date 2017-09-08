@@ -3,7 +3,7 @@ module.exports = {
 };
 
 const walk = require('./emit').walk;
-const mangle = require('../mangle').mangleIdentifier;
+const mangle = require('../utils/mangle').mangleIdentifier;
 
 // const type_infer = require('../types').infer;
 

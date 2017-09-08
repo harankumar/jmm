@@ -3,10 +3,10 @@ module.exports = {
 };
 
 const walk = require('../emit/emit').walk;
-const types = require('../types');
+const types = require('../utils/types');
 const type_infer = types.infer;
 const dedent = require('dedent');
-const mangle = require('../mangle').mangleIdentifier;
+const mangle = require('../utils/mangle').mangleIdentifier;
 
 // Returns a list of classes
 // ["Foo", "Bar", "Baz", etc.]
