@@ -11,7 +11,9 @@ require('tern/plugin/doc_comment');
 
 const tern = new (require('tern').Server)({
     plugins: {
-        doc_comment: true
+        doc_comment: {
+            strong: true
+        }
     }
 
 });
