@@ -47,4 +47,4 @@ fsPath.writeFileSync(rsFile, rs);
 
 // TODO -- do this better
 if (opts.rustc)
-    execSync("rustc --target=wasm32-unknown-emscripten " + rsFile + " -o " + htmlFile);
+    execSync("rustc -C lto -C opt-level=3 --target=wasm32-unknown-emscripten " + rsFile + " -o " + htmlFile);
