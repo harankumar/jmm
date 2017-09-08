@@ -10,6 +10,7 @@ const imports = {
     "types": [
         "bool",
         "js_array",
+        "js_float64array",
         "js_nan",
         "number",
         "string"
