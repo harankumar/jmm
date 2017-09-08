@@ -44,6 +44,9 @@ function AtAu(u,v,w) {
     Atu(w,v);
 }
 
+/**
+ * @returns {number}
+ * */
 function spectralnorm(n) {
     var i, u=new Float64Array(n), v=new Float64Array(n), w=new Float64Array(n), vv=0, vBv=0;
     for (i=0; i<n; ++i) {
