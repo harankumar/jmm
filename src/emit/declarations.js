@@ -35,7 +35,7 @@ function walkFunctionDeclaration(astNode) {
             let name = mangle(param.name);
             const type = types.infer(param).type;
 
-            let type_sig;
+            let type_sig = "";
             if (types.isMutable(type)){
                 type_sig = "&mut ";
                 name = "mut " + name;
