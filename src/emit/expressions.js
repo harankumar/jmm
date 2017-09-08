@@ -118,7 +118,6 @@ function walkUpdateExpression(astNode) {
 
 function walkAssignmentExpression(astNode) {
     // TODO -- make this complete, handle weirdities
-    // TODO -- mangle identifiers?
 
     const left = walk(astNode.left);
     const right = walk(astNode.right);
@@ -132,7 +131,7 @@ function walkAssignmentExpression(astNode) {
     if (astNode.operator === "+=" && types.infer(astNode.left).name === "string")
         assignment = `${left} = [${left}.to_str(), (${right}).to_str()].join("")`; // Seriously, we need some type inference up in here
     else
-        assignment = `${left} ${op} ${right}`;
+        assignment = `{${left} ${op} ${right}; ${left}}`;
 
     return `${assignment}`
 }
