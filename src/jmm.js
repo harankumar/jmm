@@ -2,49 +2,39 @@
 
 const fs = require('fs');
 const fsPath = require('fs-path');
-const cli = require('cli');
+const cli = require('commander');
 const execSync = require('child_process').execSync;
 const compiler = require('./compiler');
 
-const opts = cli.parse({
-    test: ["t", "Test to run", "string", null],
-    js: ["j", "A Javascript Input File", "file", null],
-    out: ["o", "Output directory", "file", null],
-    rustc: ["r", "Call rustc?", true, false],
-    all: ["a", "Run all tests?", true, false],
-    verbose: ["v", "Show AST and generated rust?", true, false]
-});
+cli
+    .version('0.4.0')
+    .option('-j, --js [file]', "JavaScript Source")
+    .option('-t, --test [test]', "Run a test")
+    .option('-o, --out [dir]', "Output Directory")
+    .option('-r, --rustc', "Compile to WASM via rustc?")
+    .option('-O, --optimize', "Run rustc in optimize mode?")
+    .option('-v, --verbose', "Give verbose output?")
+    .parse(process.argv);
 
-if (!opts.js && !opts.out) {
-    if (opts.all) {
-        opts.out = `../test/all/build`
-    } else if (opts.test) {
-        opts.js = `../test/${opts.test}/${opts.test}.js`;
-        opts.out = `../test/${opts.test}/build`;
-    }
+if (cli.test) {
+    cli.js = `../test/${cli.test}/${cli.test}.js`;
+    cli.out = `../test/${cli.test}/build`;
 }
 
-let program = "", rsFile, htmlFile;
+const program = fs.readFileSync(cli.js, "utf8");
 
-if (opts.out) {
-    // TODO -- make this cross OS compatible
-    const stub = opts.js.split("/").slice(-1)[0].split(".")[0];
-    rsFile = `${opts.out}/${stub}.rs`; // Should the .js stay in between? -- TODO
-    htmlFile = `${opts.out}/${stub}.html`;
+// TODO -- make this cross OS compatible
+const stub = cli.js.split("/").slice(-1)[0].split(".")[0];
+const rsFile = `${cli.out}/${stub}.rs`; // Should the .js stay in between? -- TODO
+const htmlFile = `${cli.out}/${stub}.html`;
 
-    program = fs.readFileSync(opts.js, "utf8");
-} else {
-    let names = fs.readdirSync("../test/");
-    for (let name of names)
-        program += fs.readFileSync(`../test/${name}/${name}.js`, "utf8") + "\n\n";
-    rsFile = "../test/all/build/all.rs";
-    htmlFile = "../test/all/build/all.html";
-}
-
-const rs = compiler.compile(program, opts.verbose);
+const rs = compiler.compile(program, cli.verbose);
 
 fsPath.writeFileSync(rsFile, rs);
 
-// TODO -- do this better
-if (opts.rustc)
-    execSync("rustc -C lto -C opt-level=3 --target=wasm32-unknown-emscripten " + rsFile + " -o " + htmlFile);
+if (cli.rustc) {
+    if (cli.optimize)
+        execSync("rustc -C lto -C opt-level=3 --target=wasm32-unknown-emscripten " + rsFile + " -o " + htmlFile);
+    else
+        execSync("rustc --target=wasm32-unknown-emscripten " + rsFile + " -o " + htmlFile);
+}
