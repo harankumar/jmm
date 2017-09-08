@@ -2,7 +2,8 @@ module.exports = {
     infer: infer,
     registerFile: registerFile,
     toRust: getCorrespondingRustType,
-    toRustFromStr: toRustFromStr
+    toRustFromStr: toRustFromStr,
+    isMutable: isMutable
 };
 
 const mangle = require('./mangle').mangleIdentifier;
@@ -53,13 +54,27 @@ function toRustFromStr(tern_type) {
         case "number":
             return "f64";
         case "string":
-            return "String"; // TODO -- change this to &str
+            return "String";
         case "boolean":
             return "bool";
     }
 
-    if (tern_type[0] === "[" && tern_type[tern_type.length -1] === "]")
-        return `Vec<${toRustFromStr(tern_type.slice(1, -1))}>`
+    if (tern_type[0] === "[" && tern_type[tern_type.length - 1] === "]")
+        return `Vec<${toRustFromStr(tern_type.slice(1, -1))}>`;
 
     return mangle(tern_type);
+}
+
+function isMutable(tern_type) {
+    switch (tern_type) {
+        case "number":
+        case "bool":
+        case "string":
+        case "undefined":
+        case "null":
+        case "?":
+            return false;
+        default:
+            return true;
+    }
 }

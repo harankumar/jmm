@@ -4,4 +4,6 @@ function foo (my_array){
 
 let memes = ["dank"];
 foo(memes);
+foo(memes);
+foo(memes);
 console.log(memes);

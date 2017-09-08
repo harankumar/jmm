@@ -12,7 +12,7 @@ module.exports = {
 };
 
 const walk = require('./emit').walk;
-const type_infer = require('../types').infer;
+const types = require('../types');
 
 const arithmetic = require('./arithmetic_operators');
 const comparison = require('./comparison_operators');
@@ -21,8 +21,17 @@ const bitwise = require('./bitwise_operators');
 function walkCallExpression(astNode) {
     const callee = walk(astNode.callee);
     const args = astNode.arguments
-        .map(walk)
-        .map((arg) => `(${arg}).clone()`)
+        .map((arg) => {
+            const val = walk(arg);
+            const type = types.infer(arg).type;
+
+            if (type === "string")
+                return `(${val}).clone()`;
+            else if (types.isMutable(type))
+                return `&mut (${val})`;
+            else
+                return `${val}`;
+        })
         .join(", ");
 
     return `${callee}(${args})`;
@@ -69,9 +78,9 @@ function walkBinaryExpression(astNode) {
         ">>>": bitwise.buildZeroFillRightShift
     };
 
-    const left_type = type_infer(astNode.left).type;
+    const left_type = types.infer(astNode.left).type;
     const left = walk(astNode.left);
-    const right_type = type_infer(astNode.right).type;
+    const right_type = types.infer(astNode.right).type;
     const right = walk(astNode.right);
 
     const builder = builders[astNode.operator];
@@ -120,7 +129,7 @@ function walkAssignmentExpression(astNode) {
     // TODO -- type inference
     let assignment;
 
-    if (astNode.operator === "+=" && type_infer(astNode.left).name === "string")
+    if (astNode.operator === "+=" && types.infer(astNode.left).name === "string")
         assignment = `${left} = [${left}.to_str(), (${right}).to_str()].join("")`; // Seriously, we need some type inference up in here
     else
         assignment = `${left} ${op} ${right}`;
@@ -136,7 +145,7 @@ function walkMemberExpression(astNode) {
     let property = walk(astNode.property);
 
     // TODO -- this is a hot mess, FIXME!
-    if (type_infer(astNode.object).name === "Array") {
+    if (types.infer(astNode.object).name === "Array") {
         if (property === "__js__length") {
             return `${object}.__js__length()`;
         }

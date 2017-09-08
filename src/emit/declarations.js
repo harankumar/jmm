@@ -32,9 +32,17 @@ function walkFunctionDeclaration(astNode) {
     const id = walk(astNode.id);
     const params = astNode.params
         .map((param) => {
-            const name = mangle(param.name);
-            const type = types.toRust(types.infer(param));
-            return `${name}: ${type}`
+            let name = mangle(param.name);
+            const type = types.infer(param).type;
+
+            let type_sig;
+            if (types.isMutable(type)){
+                type_sig = "&mut ";
+                name = "mut " + name;
+            }
+            type_sig += types.toRustFromStr(type);
+
+            return `${name}: ${type_sig}`
         }); // TODO --- type infer!!!
     const body = walk(astNode.body);
 
