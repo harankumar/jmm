@@ -8,6 +8,10 @@ function A(i,j) {
     return 1/((i+j)*(i+j+1)/2+i+1);
 }
 
+/**
+ * @param {Float64Array} u
+ * @param {Float64Array} v
+ * */
 function Au(u,v) {
     for (var i=0; i<u.length; ++i) {
         var t = 0;
@@ -17,6 +21,10 @@ function Au(u,v) {
     }
 }
 
+/**
+ * @param {Float64Array} u
+ * @param {Float64Array} v
+ * */
 function Atu(u,v) {
     for (var i=0; i<u.length; ++i) {
         var t = 0;
@@ -26,6 +34,11 @@ function Atu(u,v) {
     }
 }
 
+/**
+ * @param {Float64Array} u
+ * @param {Float64Array} v
+ * @param {Float64Array} w
+ * */
 function AtAu(u,v,w) {
     Au(u,w);
     Atu(w,v);
@@ -47,4 +60,5 @@ function spectralnorm(n) {
     return Math.sqrt(vBv/vv);
 }
 
-console.log(spectralnorm(+process.argv[2]).toFixed(9));
+// console.log(spectralnorm(+process.argv[2]).toFixed(9));
+console.log(spectralnorm(5500));
