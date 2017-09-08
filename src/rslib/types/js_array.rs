@@ -32,3 +32,33 @@ impl<'a> ToString for &'a mut Vec<String> {
         ["[".to_string(), self.join(", "), "]".to_string()].join("")
     }
 }
+
+
+
+impl __js__Array for Vec<String> {
+    fn __js__length(&self) -> f64 {
+        self.len() as f64
+    }
+    fn __js__push(&mut self, val: String) -> f64 {
+        self.push(val);
+        self.len() as f64
+    }
+}
+
+impl TypeOf for Vec<String> {
+    fn type_of(&self) -> String {
+        String::from("object")  // TODO -- is this correct? FIXME
+    }
+}
+
+impl ToBool for Vec<String> {
+    fn is_truthy(&self) -> bool {
+        true
+    }
+}
+
+impl ToString for Vec<String> {
+    fn to_str(&self) -> String {
+        ["[".to_string(), self.join(", "), "]".to_string()].join("")
+    }
+}

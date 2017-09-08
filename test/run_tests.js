@@ -3,7 +3,7 @@
 const execSync = require('child_process').execSync;
 
 const tests = [
-    // "arrays",
+    "arrays",
     "arithmetic",
     "bitwise",
     "bool",
