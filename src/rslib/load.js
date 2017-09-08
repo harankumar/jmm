@@ -19,7 +19,8 @@ const imports = {
         "logical"
     ],
     "globals": [
-        "console"
+        "console",
+        "math"
     ]
 };
 
