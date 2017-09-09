@@ -18,3 +18,9 @@ impl ToString for String {
         (*self).clone()
     }
 }
+
+impl ToNum for String {
+    fn to_num(&self) -> f64 {
+        (*self).parse().unwrap()
+    }
+}
