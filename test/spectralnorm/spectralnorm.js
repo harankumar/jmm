@@ -64,4 +64,4 @@ function spectralnorm(n) {
 }
 
 // console.log(spectralnorm(+process.argv[2]).toFixed(9));
-console.log(spectralnorm(5500));
+console.log(spectralnorm(5500).toFixed(9));
