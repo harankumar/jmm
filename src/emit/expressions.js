@@ -48,7 +48,11 @@ function walkUnaryExpression(astNode) {
     // Verify the rust equivalent exists
     switch (op) {
         case "!":
-            return `__jmm__not((${argument}).clone())`
+            return `__jmm__not((${argument}).clone())`;
+        case "+":
+            return arithmetic.buildAdd("0.0", argument, "number", types.infer(astNode.argument).type);
+        case "-":
+            return arithmetic.buildSub("0.0", argument, "number", types.infer(astNode.argument).type);
     }
 }
 
