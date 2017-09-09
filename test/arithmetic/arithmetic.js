@@ -30,3 +30,11 @@ console.log(2 - 1);
 console.log(3 - true - true);
 console.log(1 - false);
 console.log(1 - false);
+
+// Unary Operations
+console.log("You should see a bunch of ones: ");
+console.log(-(-1));
+console.log(-(+(-1)));
+console.log(+(+1));
+console.log(-(-(+1)));
+console.log(+(-(-1)));
