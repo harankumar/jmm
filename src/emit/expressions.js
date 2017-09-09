@@ -120,18 +120,24 @@ function walkAssignmentExpression(astNode) {
     // TODO -- make this complete, handle weirdities
 
     const left = walk(astNode.left);
-    const right = walk(astNode.right);
+    let right = walk(astNode.right);
     const op = astNode.operator;
 
     // NOTE: THIS DOESN'T HANDLE THESE AS EXPRESSIONS
 
     // TODO -- type inference
-    let assignment;
+    let assignment = "";
+
+    // Unwrap Assignment Expressions
+    if (astNode.right.type === "AssignmentExpression"){
+        assignment = right + ";\n";
+        right = walk(astNode.right.left);
+    }
 
     if (astNode.operator === "+=" && types.infer(astNode.left).name === "string")
-        assignment = `${left} = [${left}.to_str(), (${right}).to_str()].join("")`; // Seriously, we need some type inference up in here
+        assignment += `${left} = [${left}.to_str(), (${right}).to_str()].join("")`; // Seriously, we need some type inference up in here
     else
-        assignment = `{${left} ${op} ${right}; ${left}}`;
+        assignment += `${left} ${op} ${right}`;
 
     return `${assignment}`
 }
