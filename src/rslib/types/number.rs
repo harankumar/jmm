@@ -25,3 +25,27 @@ impl ToNum for f64 {
         *self
     }
 }
+
+trait __js__Number {
+    fn __js__toFixed(&self, n: f64) -> String;
+}
+
+impl __js__Number for f64 {
+    fn __js__toFixed(&self, n: f64) -> String {
+        let m = n as usize;
+        assert!(n >= 0.0 && m <= 20, "n must be between 0 and 20 inclusive!");
+
+        let x = *self;
+
+        let whole = (if x > 0.0 { x.floor() } else { x.ceil() });
+        let frac = (x - whole).abs();
+
+        let mut fst = whole.to_string();
+        fst.push_str(".");
+        let mut snd = frac.to_string();
+        snd.push_str("000000000000000000000");
+
+        fst.push_str(&snd[2..(m + 2)]);
+        fst
+    }
+}
