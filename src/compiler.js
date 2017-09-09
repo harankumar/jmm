@@ -28,5 +28,5 @@ function compile(js, verbose) {
         console.log("GENERATED RUST\n\n" + generatedRust + "\n\n");
 
     const rslib = rslibgen();
-    return rslib + rs_classes + generatedRust;
+    return "fn main(){\n" + rslib + rs_classes + generatedRust + "\n}";
 }
