@@ -5,6 +5,7 @@ const fsPath = require('fs-path');
 const cli = require('commander');
 const execSync = require('child_process').execSync;
 const compiler = require('./compiler');
+const path = require('path');
 
 cli
     .version('0.4.0')
@@ -17,16 +18,16 @@ cli
     .parse(process.argv);
 
 if (cli.test) {
-    cli.js = `../test/${cli.test}/${cli.test}.js`;
-    cli.out = `../test/${cli.test}/build`;
+    cli.js = path.normalize(`../test/${cli.test}/${cli.test}.js`);
+    cli.out = path.normalize(`../test/${cli.test}/build`);
 }
 
 const program = fs.readFileSync(cli.js, "utf8");
 
 // TODO -- make this cross OS compatible
 const stub = cli.js.split("/").slice(-1)[0].split(".")[0];
-const rsFile = `${cli.out}/${stub}.rs`; // Should the .js stay in between? -- TODO
-const htmlFile = `${cli.out}/${stub}.html`;
+const rsFile = path.join(cli.out, `${stub}_jmm.rs`);
+const htmlFile = path.join(cli.out, `${stub}_jmm.html`);
 
 const rs = compiler.compile(program, cli.verbose);
 
