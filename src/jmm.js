@@ -24,7 +24,6 @@ if (cli.test) {
 
 const program = fs.readFileSync(cli.js, "utf8");
 
-// TODO -- make this cross OS compatible
 const stub = cli.js.split("/").slice(-1)[0].split(".")[0];
 const rsFile = path.join(cli.out, `${stub}_jmm.rs`);
 const htmlFile = path.join(cli.out, `${stub}_jmm.html`);
@@ -36,8 +35,12 @@ fs.emptyDirSync(cli.out);
 fsPath.writeFileSync(rsFile, rs);
 
 if (cli.rustc) {
+    let cmd = "rustc --target=wasm32-unknown-emscripten ";
+
     if (cli.optimize)
-        execSync("rustc -C lto -C opt-level=3 --target=wasm32-unknown-emscripten " + rsFile + " -o " + htmlFile);
-    else
-        execSync("rustc --target=wasm32-unknown-emscripten " + rsFile + " -o " + htmlFile);
+        cmd += "-C lto -C opt-level=3 ";
+
+    cmd += rsFile + " -o " + htmlFile;
+
+    execSync(cmd);
 }
