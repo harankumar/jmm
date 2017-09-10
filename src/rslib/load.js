@@ -20,7 +20,8 @@ const imports = {
     ],
     "globals": [
         "console",
-        "math"
+        "math",
+        "process"
     ]
 };
 
