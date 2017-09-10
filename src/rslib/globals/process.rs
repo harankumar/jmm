@@ -9,5 +9,3 @@ let mut __js__process = Process {
 // First two elements of process.argv are not equivalent to node,
 // but this preserves the indexes of the values after that
 __js__process.__js__argv.val.insert(0, "".to_owned());
-
-println!("{}", "");
