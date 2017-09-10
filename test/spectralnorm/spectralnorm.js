@@ -1,3 +1,4 @@
+
 // The Computer Language Benchmarks Game
 // http://benchmarksgame.alioth.debian.org/
 //
@@ -63,5 +64,4 @@ function spectralnorm(n) {
     return Math.sqrt(vBv/vv);
 }
 
-// console.log(spectralnorm(+process.argv[2]).toFixed(9));
-console.log(spectralnorm(5500).toFixed(9));
+console.log(spectralnorm(+process.argv[2]).toFixed(9));
