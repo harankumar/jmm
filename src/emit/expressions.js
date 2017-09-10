@@ -179,7 +179,7 @@ function walkConditionalExpression(astNode) {
 function walkArrayExpression(astNode) {
     const elements = astNode.elements.map(walk).join(", ");
 
-    return `vec![${elements}]`;
+    return `__js__Array::new(vec![${elements}])`;
 }
 
 function walkThisExpression(astNode) {

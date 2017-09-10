@@ -62,7 +62,7 @@ function toRustFromStr(tern_type) {
     }
 
     if (tern_type[0] === "[" && tern_type[tern_type.length - 1] === "]")
-        return `Vec<${toRustFromStr(tern_type.slice(1, -1))}>`;
+        return `__js__Array<${toRustFromStr(tern_type.slice(1, -1))}>`;
 
     return mangle(tern_type);
 }
