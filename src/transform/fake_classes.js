@@ -184,8 +184,6 @@ function detectClassFunctions(astRoot, className) {
         && astRoot.left.object.property.name === "prototype"
         && astRoot.right.type === "FunctionExpression"
     ) {
-        // console.log(JSON.stringify(astRoot, null, 2));
-        console.log("FOUND IT")
         return [[astRoot.left.property.name, astRoot.right]];
     }
 
