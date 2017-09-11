@@ -26,6 +26,10 @@ Foo.prototype = {
     }
 };
 
+Foo.prototype.nork = function(){
+    console.log("nork");
+};
+
 function baz(x) {
     console.log("BAZ: " + x.a + x.zork("boo"));
 }
@@ -45,3 +49,4 @@ console.log(p); // boofoomemes
 baz(x); // BAZ: boofooboofooboo
 bar(x);
 x.quork(); // boofoobar
+x.nork(); // nork
