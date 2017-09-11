@@ -163,6 +163,8 @@ function generateConstructor(className, fields, constructorAST) {
 // }
 // TODO -- handle other common OOP prototype patterns
 function detectClassFunctions(astRoot, className) {
+    // console.log(JSON.stringify(astRoot, null, 2))
+    // console.log("\n\n")
     if (!astRoot)
         return false;
 
@@ -175,6 +177,19 @@ function detectClassFunctions(astRoot, className) {
         return astRoot.right.properties.map((prop) => [prop.key.name, prop.value]);
     }
 
+    if (astRoot.type === "AssignmentExpression"
+        && astRoot.left.type === "MemberExpression"
+        && astRoot.left.object.type === "MemberExpression"
+        && astRoot.left.object.object.name === className
+        && astRoot.left.object.property.name === "prototype"
+        && astRoot.right.type === "FunctionExpression"
+    ) {
+        // console.log(JSON.stringify(astRoot, null, 2));
+        console.log("FOUND IT")
+        return [[astRoot.left.property.name, astRoot.right]];
+    }
+
+    let ret = [];
     for (let child in astRoot) {
         if (!astRoot.hasOwnProperty(child))
             continue;
@@ -182,10 +197,13 @@ function detectClassFunctions(astRoot, className) {
         if (typeof astRoot[child] === "object") {
             const temp = detectClassFunctions(astRoot[child], className);
             if (temp) {
-                return temp;
+                ret = ret.concat(temp);
             }
         }
     }
+
+    if (ret.length > 0)
+        return ret;
 
     return false;
 }
@@ -282,7 +300,13 @@ function _removeOOP(astRoot, classNames) {
             && astRoot.left.type === "MemberExpression"
             && classNames.has(astRoot.left.object.name)
             && astRoot.left.property.name === "prototype"
-            && astRoot.right.type === "ObjectExpression");
+            && astRoot.right.type === "ObjectExpression")
+        || (astRoot.type === "AssignmentExpression"
+            && astRoot.left.type === "MemberExpression"
+            && astRoot.left.object.type === "MemberExpression"
+            && classNames.has(astRoot.left.object.object.name)
+            && astRoot.left.object.property.name === "prototype"
+            && astRoot.right.type === "FunctionExpression");
 
     if (isOOP) {
         return false;
