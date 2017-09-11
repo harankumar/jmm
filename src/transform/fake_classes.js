@@ -145,7 +145,10 @@ function generateConstructor(className, fields, constructorAST) {
     };
 
     const this_default = `${mangle(className)} { ${fields.map((field) => {
-        return field.name + ": " + default_vals[field.type];
+        if (default_vals.hasOwnProperty(field.type))
+            return field.name + ": " + default_vals[field.type];
+        if (field.type.indexOf("__js__Array") === 0)
+            return field.name + ": __js__Array::new(vec![])"
     }).join(", ")} }`;
 
     const constructorBody = constructorAST.body.body
@@ -284,6 +287,12 @@ function buildFakeClass(className, fields, functionASTs, constructor) {
         impl ${mangle(className)} {
             ${constructor}
             ${rsFunctions}
+        }
+        
+        impl ToString for ${mangle(className)} {
+            fn to_str(&self) -> String {
+                String::from("[object Object]")
+            }
         }
     `);
 }
