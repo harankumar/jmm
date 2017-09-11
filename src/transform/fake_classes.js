@@ -113,18 +113,25 @@ function detectClassFields(astRoot) {
 
         if (typeof astRoot[child] === "object") {
             const temp = detectClassFields(astRoot[child]);
-            ret = ret.concat(temp);
+            temp.forEach((field) => {
+                for (let f of ret) {
+                    if (f.name === field.name)
+                        return;
+                }
+                ret.push(field)
+            });
         }
     }
 
-    return ret;
+    // console.log(Array.from(ret))
+    return Array.from(ret);
 }
 
 // Returns rust code for constructor
 function generateConstructor(className, fields, constructorAST) {
-    // TODO -- actually do stuff in the constructor
-
     const params = constructorAST.params.map((param) => {
+        // console.log(param)
+        // console.log(types.toRust(type_infer(param)))
         let type = types.toRust(type_infer(param));
         let id = mangle(param.name);
 
