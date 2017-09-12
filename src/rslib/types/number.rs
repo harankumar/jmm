@@ -37,10 +37,12 @@ impl __js__Number for f64 {
 
         let x = *self;
 
+        let sign = (if x >= 0.0 { "" } else { "-" });
         let whole = (if x > 0.0 { x.floor() } else { x.ceil() });
         let frac = (x - whole).abs();
 
-        let mut fst = whole.to_string();
+        let mut fst = sign.to_string();
+        fst.push_str(&whole.to_string());
         fst.push_str(".");
         let mut snd = frac.to_string();
         snd.push_str("000000000000000000000");
