@@ -52,6 +52,7 @@ function walk(astNode) {
     if (astNode && astNode.type && walkers[astNode.type])
         return walkers[astNode.type](astNode);
     else {
+        console.log(astNode);
         throw `EMITTER DOESN'T KNOW HOW TO HANDLE ${astNode.type}`;
     }
 }
