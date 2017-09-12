@@ -1,3 +1,4 @@
+#[derive(Clone)]
 struct __js__Array<T: ToString> {
     val: Vec<T>
 }

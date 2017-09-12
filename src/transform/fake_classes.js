@@ -280,6 +280,7 @@ function buildFakeClass(className, fields, functionASTs, constructor) {
     // TODO -- handle stuff like toString
 
     return dedent(`
+        #[derive(Clone)]
         struct ${mangle(className)} {
             ${rsStructFields}
         }
@@ -287,6 +288,10 @@ function buildFakeClass(className, fields, functionASTs, constructor) {
         impl ${mangle(className)} {
             ${constructor}
             ${rsFunctions}
+            
+            fn __js__clone(&self) -> ${mangle(className)} {
+                self.clone()
+            }
         }
         
         impl ToString for ${mangle(className)} {
