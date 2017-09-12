@@ -35,7 +35,7 @@ fs.emptyDirSync(cli.out);
 fsPath.writeFileSync(rsFile, rs);
 
 if (cli.rustc) {
-    let cmd = "rustc --target=wasm32-unknown-emscripten ";
+    let cmd = "rustc --target=wasm32-unknown-emscripten --color=always ";
 
     if (cli.optimize)
         cmd += "-C lto -C opt-level=3 ";
