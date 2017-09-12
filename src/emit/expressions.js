@@ -51,7 +51,7 @@ function walkUnaryExpression(astNode) {
             return `__jmm__not((${argument}).clone())`;
         case "+":
         case "-":
-            const to_num = types.infer(astNode.argument) === "number"
+            const to_num = types.infer(astNode.argument).type === "number"
                 ? "" : ".to_num()";
             return `(0.0 ${op} (${argument})${to_num})`;
     }
