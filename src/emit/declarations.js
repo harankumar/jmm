@@ -36,7 +36,7 @@ function walkFunctionDeclaration(astNode) {
             const type = types.infer(param).type;
 
             let type_sig = "";
-            if (types.isMutable(type)){
+            if (types.isMutable(type)) {
                 type_sig = "&mut ";
                 name = "mut " + name;
             }
@@ -51,5 +51,17 @@ function walkFunctionDeclaration(astNode) {
         ? " -> " + types.toRustFromStr(js_type[1])
         : "";
 
-    return `fn ${id} (${params.join(", ")}) ${return_sig} {\n${body}};\n`;
+    let default_ret = "";
+    if (return_sig === "")
+        default_ret = "";
+    else if (return_sig === " -> f64")
+        default_ret = "0.0";
+    else if (return_sig === " -> String")
+        default_ret = 'String::from("")';
+    else if (return_sig === " -> bool")
+        default_ret = 'false';
+    else if (return_sig.indexOf(" -> __js__Array") === 0)
+        default_ret = '__js__Array::new(vec![])';
+
+    return `fn ${id} (${params.join(", ")}) ${return_sig} {\n${body} \n return ${default_ret}};\n`;
 }
