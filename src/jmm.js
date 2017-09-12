@@ -12,6 +12,7 @@ cli
     .option('-j, --js [file]', "JavaScript Source")
     .option('-t, --test [test]', "Run a test")
     .option('-o, --out [dir]', "Output Directory")
+    .option('-f, --fmt', "Format rust code via rustfmt?")
     .option('-r, --rustc', "Compile to WASM via rustc?")
     .option('-O, --optimize', "Run rustc in optimize mode?")
     .option('-v, --verbose', "Give verbose output?")
@@ -33,6 +34,11 @@ const rs = compiler.compile(program, cli.verbose);
 fs.emptyDirSync(cli.out);
 
 fsPath.writeFileSync(rsFile, rs);
+
+if (cli.fmt){
+
+    execSync(`rustfmt ${rsFile}`);
+}
 
 if (cli.rustc) {
     let cmd = "rustc --target=wasm32-unknown-emscripten --color=always ";
