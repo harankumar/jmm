@@ -33,7 +33,7 @@ function walkDoWhileStatement(astNode) {
     const test = walk(astNode.test);
     const body = walk(astNode.body);
 
-    return `${body}\n while (${test}){\n${body}}\n`;
+    return `loop {\n ${body} \n if (!(${test})) {break;}\n}`
 }
 
 function walkIfStatement(astNode) {
