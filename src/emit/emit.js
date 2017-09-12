@@ -24,6 +24,7 @@ const walkers = {
     "BlockStatement": statements.walkBlockStatement,
     "ReturnStatement": statements.walkReturnStatement,
     "BreakStatement": statements.walkBreakStatement,
+    "ThrowStatement": statements.walkThrowStatement,
 
     "CallExpression": expressions.walkCallExpression,
     "UnaryExpression": expressions.walkUnaryExpression,
