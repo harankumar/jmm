@@ -55,13 +55,13 @@ function walkFunctionDeclaration(astNode) {
     if (return_sig === "")
         default_ret = "";
     else if (return_sig === " -> f64")
-        default_ret = "0.0";
+        default_ret = "return 0.0";
     else if (return_sig === " -> String")
-        default_ret = 'String::from("")';
+        default_ret = 'return String::from("")';
     else if (return_sig === " -> bool")
-        default_ret = 'false';
+        default_ret = 'return false';
     else if (return_sig.indexOf(" -> __js__Array") === 0)
-        default_ret = '__js__Array::new(vec![])';
+        default_ret = 'return __js__Array::new(vec![])';
 
-    return `fn ${id} (${params.join(", ")}) ${return_sig} {\n${body} \n return ${default_ret}};\n`;
+    return `fn ${id} (${params.join(", ")}) ${return_sig} {\n${body} \n ${default_ret}};\n`;
 }
