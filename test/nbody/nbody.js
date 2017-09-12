@@ -84,7 +84,8 @@ function NBodySystem(bodies){
     /** @type {number} */
     var size = this.bodies.length;
     for (var i=0; i<size; i++){
-        var b = this.bodies[i];
+        var b = this.bodies[i].clone();
+        /** @type {number} */
         var m = b.mass;
         px += b.vx * m;
         py += b.vy * m;
@@ -101,9 +102,11 @@ NBodySystem.prototype.advance = function(dt){
     var size = this.bodies.length;
 
     for (var i=0; i<size; i++) {
-        var bodyi = this.bodies[i];
+        /** @type {Body} */
+        var bodyi = this.bodies[i].clone();
         for (var j=i+1; j<size; j++) {
-            var bodyj = this.bodies[j];
+            /** @type {Body} */
+            var bodyj = this.bodies[j].clone();
             dx = bodyi.x - bodyj.x;
             dy = bodyi.y - bodyj.y;
             dz = bodyi.z - bodyj.z;
@@ -118,11 +121,15 @@ NBodySystem.prototype.advance = function(dt){
             bodyj.vx += dx * bodyi.mass * mag;
             bodyj.vy += dy * bodyi.mass * mag;
             bodyj.vz += dz * bodyi.mass * mag;
+
+            this.bodies[j] = bodyj;
         }
+        this.bodies[i] = bodyi;
     }
 
     for (var i=0; i<size; i++) {
-        var body = this.bodies[i];
+        /** @type {Body} */
+        var body = this.bodies[i].clone();
         body.x += dt * body.vx;
         body.y += dt * body.vy;
         body.z += dt * body.vz;
@@ -138,7 +145,7 @@ NBodySystem.prototype.energy = function(){
     var size = this.bodies.length;
 
     for (var i=0; i<size; i++) {
-        var bodyi = this.bodies[i];
+        var bodyi = this.bodies[i].clone();
 
         e += 0.5 * bodyi.mass *
             ( bodyi.vx * bodyi.vx
@@ -146,7 +153,7 @@ NBodySystem.prototype.energy = function(){
                 + bodyi.vz * bodyi.vz );
 
         for (var j=i+1; j<size; j++) {
-            var bodyj = this.bodies[j];
+            var bodyj = this.bodies[j].clone();
             dx = bodyi.x - bodyj.x;
             dy = bodyi.y - bodyj.y;
             dz = bodyi.z - bodyj.z;
@@ -160,9 +167,6 @@ NBodySystem.prototype.energy = function(){
 
 
 var n = +process.argv[2];
-// var bodies = new NBodySystem( Array(
-//     Sun(),Jupiter(),Saturn(),Uranus(),Neptune()
-// ));
 var bodies = new NBodySystem([
     Sun(),Jupiter(),Saturn(),Uranus(),Neptune()
 ]);
