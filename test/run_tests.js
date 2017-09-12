@@ -14,6 +14,7 @@ const tests = [
     "helloworld",
     "nan",
     "oop",
+    "spectralnorm",
     "syntax"
 ];
 
