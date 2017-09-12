@@ -2,9 +2,9 @@
    http://benchmarksgame.alioth.debian.org/
    contributed by Isaac Gouy */
 
-var PI = 3.141592653589793;
-var SOLAR_MASS = 4 * PI * PI;
-var DAYS_PER_YEAR = 365.24;
+const PI = 3.141592653589793;
+const SOLAR_MASS = 4 * 3.141592653589793 * 3.141592653589793;
+const DAYS_PER_YEAR = 365.24;
 
 function Body(x,y,z,vx,vy,vz,mass){
     this.x = x;
@@ -20,7 +20,7 @@ Body.prototype.offsetMomentum = function(px,py,pz) {
     this.vx = -px / SOLAR_MASS;
     this.vy = -py / SOLAR_MASS;
     this.vz = -pz / SOLAR_MASS;
-    return this;
+    // return this;
 }
 
 function Jupiter(){
@@ -81,6 +81,7 @@ function NBodySystem(bodies){
     var px = 0.0;
     var py = 0.0;
     var pz = 0.0;
+    /** @type {number} */
     var size = this.bodies.length;
     for (var i=0; i<size; i++){
         var b = this.bodies[i];
@@ -93,7 +94,10 @@ function NBodySystem(bodies){
 }
 
 NBodySystem.prototype.advance = function(dt){
-    var dx, dy, dz, distance, mag;
+    /** @type {number} */
+    var distance;
+    var dx, dy, dz, mag;
+    /** @type {number} */
     var size = this.bodies.length;
 
     for (var i=0; i<size; i++) {
@@ -126,8 +130,11 @@ NBodySystem.prototype.advance = function(dt){
 }
 
 NBodySystem.prototype.energy = function(){
-    var dx, dy, dz, distance;
+    /** @type {number} */
+    var distance;
+    var dx, dy, dz;
     var e = 0.0;
+    /** @type {number} */
     var size = this.bodies.length;
 
     for (var i=0; i<size; i++) {
@@ -153,9 +160,12 @@ NBodySystem.prototype.energy = function(){
 
 
 var n = +process.argv[2];
-var bodies = new NBodySystem( Array(
+// var bodies = new NBodySystem( Array(
+//     Sun(),Jupiter(),Saturn(),Uranus(),Neptune()
+// ));
+var bodies = new NBodySystem([
     Sun(),Jupiter(),Saturn(),Uranus(),Neptune()
-));
+]);
 
 console.log(bodies.energy().toFixed(9));
 for (var i=0; i<n; i++){ bodies.advance(0.01); }
