@@ -42,7 +42,8 @@ const walkers = {
     "VariableDeclarator": declarations.walkVariableDeclarator,
     "FunctionDeclaration": declarations.walkFunctionDeclaration,
 
-    "JMM_REMOVED": () => ""
+    "JMM_REMOVED": () => "",
+    "JMM_CLONE": (x) => `(${walk(x.argument)}).clone()`
 };
 
 function walkProgram(astNode) {

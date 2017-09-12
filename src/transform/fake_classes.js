@@ -278,7 +278,6 @@ function buildFakeClass(className, fields, functionASTs, constructor) {
         : "";
 
     // TODO -- handle stuff like toString
-
     return dedent(`
         #[derive(Clone)]
         struct ${mangle(className)} {
@@ -288,10 +287,6 @@ function buildFakeClass(className, fields, functionASTs, constructor) {
         impl ${mangle(className)} {
             ${constructor}
             ${rsFunctions}
-            
-            fn __js__clone(&self) -> ${mangle(className)} {
-                self.clone()
-            }
         }
         
         impl ToString for ${mangle(className)} {
@@ -346,8 +341,40 @@ function _removeOOP(astRoot, classNames) {
     return astRoot;
 }
 
+function convertToClone(astRoot) {
+    if (
+        astRoot
+        && astRoot.type === "CallExpression"
+        && astRoot.callee.type === "MemberExpression"
+        && astRoot.callee.object.name === "Object"
+        && astRoot.callee.property.name === "assign"
+        && astRoot.arguments.length === 2
+        && astRoot.arguments[0].type === "ObjectExpression"
+        && astRoot.arguments[0].properties.length === 0
+    ) {
+        let ret = {
+            type: "JMM_CLONE",
+            argument: astRoot.arguments[1]
+        };
+        return ret;
+    }
+
+    for (let child in astRoot) {
+        if (!astRoot.hasOwnProperty(child))
+            continue;
+
+        if (typeof astRoot[child] === "object") {
+            astRoot[child] = convertToClone(astRoot[child]);
+        }
+    }
+
+    return astRoot;
+}
+
 // Returns array [astWithoutClasses, RUST Code]
 function generateFakeClasses(astRoot) {
+    astRoot = convertToClone(astRoot);
+
     const classNames = removeBuiltinClasses(detectClasses(astRoot));
 
     let ret = "";
