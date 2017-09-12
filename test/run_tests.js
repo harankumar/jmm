@@ -19,4 +19,4 @@ const tests = [
 ];
 
 for (let test of tests)
-    execSync(`node ../src/jmm -t ${test} -rv`);
+    execSync(`node ../src/jmm -t ${test} -wv`);

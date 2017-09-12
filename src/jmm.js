@@ -13,7 +13,8 @@ cli
     .option('-t, --test [test]', "Run a test")
     .option('-o, --out [dir]', "Output Directory")
     .option('-f, --fmt', "Format rust code via rustfmt?")
-    .option('-r, --rustc', "Compile to WASM via rustc?")
+    .option('-w, --wasm', "Compile to WASM via rustc?")
+    .option('-b, --bin', "Compile to executable via rustc?")
     .option('-O, --optimize', "Run rustc in optimize mode?")
     .option('-v, --verbose', "Give verbose output?")
     .parse(process.argv);
@@ -28,6 +29,7 @@ const program = fs.readFileSync(cli.js, "utf8");
 const stub = cli.js.split("/").slice(-1)[0].split(".")[0];
 const rsFile = path.join(cli.out, `${stub}_jmm.rs`);
 const htmlFile = path.join(cli.out, `${stub}_jmm.html`);
+const output = path.join(cli.out, `${stub}_jmm`);
 
 const rs = compiler.compile(program, cli.verbose);
 
@@ -40,13 +42,24 @@ if (cli.fmt){
     execSync(`rustfmt ${rsFile}`);
 }
 
-if (cli.rustc) {
+if (cli.wasm) {
     let cmd = "rustc --target=wasm32-unknown-emscripten --color=always ";
 
     if (cli.optimize)
         cmd += "-C lto -C opt-level=3 ";
 
     cmd += rsFile + " -o " + htmlFile;
+
+    execSync(cmd);
+}
+
+if (cli.bin) {
+    let cmd = "rustc --color=always ";
+
+    if (cli.optimize)
+        cmd += "-C lto -C opt-level=3 ";
+
+    cmd += rsFile + " -o " + output;
 
     execSync(cmd);
 }
