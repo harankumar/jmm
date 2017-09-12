@@ -23,6 +23,7 @@ const walkers = {
     "SwitchStatement": statements.walkSwitchStatement,
     "BlockStatement": statements.walkBlockStatement,
     "ReturnStatement": statements.walkReturnStatement,
+    "BreakStatement": statements.walkBreakStatement,
 
     "CallExpression": expressions.walkCallExpression,
     "UnaryExpression": expressions.walkUnaryExpression,

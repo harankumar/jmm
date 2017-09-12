@@ -6,7 +6,8 @@ module.exports = {
     walkWhileStatement: walkWhileStatement,
     walkExpressionStatement: walkExpressionStatement,
     walkSwitchStatement: walkSwitchStatement,
-    walkDoWhileStatement: walkDoWhileStatement
+    walkDoWhileStatement: walkDoWhileStatement,
+    walkBreakStatement: walkBreakStatement
 };
 
 const walk = require('./emit').walk;
@@ -126,4 +127,8 @@ function walkReturnStatement(astNode) {
     const ret = walk(astNode.argument);
 
     return `return (${ret});\n`;
+}
+
+function walkBreakStatement(astNode) {
+    return "break;\n";
 }
