@@ -11,6 +11,7 @@ function fannkuch(n) {
    for(var i=0; i<n; i++){ p.push(i); q.push(i); s.push(i); }
    do {
       // Copy and flip.
+       /**@type {number} */
       var q0 = p[0];                                     // Cache 0th element.
       if (q0 != 0){
          for(var i=1; i<n; i++) q[i] = p[i];             // Work on a copy.
@@ -32,8 +33,10 @@ function fannkuch(n) {
       }
       // Permute.
       if (sign === 1){
+          /**@type {number} */
          var t = p[1]; p[1] = p[0]; p[0] = t; sign = -1; // Rotate 0<-1.
       } else {
+          /** @type {number} */
          var t = p[1]; p[1] = p[2]; p[2] = t; sign = 1;  // Rotate 0<-1 and 0<-1<-2.
          for(var i=2; i<n; i++){
 	    var sx = s[i];
