@@ -84,7 +84,7 @@ function NBodySystem(bodies){
     /** @type {number} */
     var size = this.bodies.length;
     for (var i=0; i<size; i++){
-        var b = this.bodies[i].clone();
+        var b = Object.assign({}, this.bodies[i]);
         /** @type {number} */
         var m = b.mass;
         px += b.vx * m;
@@ -103,10 +103,10 @@ NBodySystem.prototype.advance = function(dt){
 
     for (var i=0; i<size; i++) {
         /** @type {Body} */
-        var bodyi = this.bodies[i].clone();
+        var bodyi = Object.assign({}, this.bodies[i]);
         for (var j=i+1; j<size; j++) {
             /** @type {Body} */
-            var bodyj = this.bodies[j].clone();
+            var bodyj = Object.assign({}, this.bodies[j]);
             dx = bodyi.x - bodyj.x;
             dy = bodyi.y - bodyj.y;
             dz = bodyi.z - bodyj.z;
@@ -129,10 +129,11 @@ NBodySystem.prototype.advance = function(dt){
 
     for (var i=0; i<size; i++) {
         /** @type {Body} */
-        var body = this.bodies[i].clone();
+        var body = Object.assign({}, this.bodies[i]);
         body.x += dt * body.vx;
         body.y += dt * body.vy;
         body.z += dt * body.vz;
+        this.bodies[i] = body;
     }
 }
 
@@ -145,7 +146,7 @@ NBodySystem.prototype.energy = function(){
     var size = this.bodies.length;
 
     for (var i=0; i<size; i++) {
-        var bodyi = this.bodies[i].clone();
+        var bodyi = Object.assign({}, this.bodies[i]);
 
         e += 0.5 * bodyi.mass *
             ( bodyi.vx * bodyi.vx
@@ -153,7 +154,7 @@ NBodySystem.prototype.energy = function(){
                 + bodyi.vz * bodyi.vz );
 
         for (var j=i+1; j<size; j++) {
-            var bodyj = this.bodies[j].clone();
+            var bodyj = Object.assign({}, this.bodies[j]);
             dx = bodyi.x - bodyj.x;
             dy = bodyi.y - bodyj.y;
             dz = bodyi.z - bodyj.z;
