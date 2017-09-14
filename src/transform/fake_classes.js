@@ -346,15 +346,18 @@ function convertToClone(astRoot) {
         astRoot
         && astRoot.type === "CallExpression"
         && astRoot.callee.type === "MemberExpression"
-        && astRoot.callee.object.name === "Object"
-        && astRoot.callee.property.name === "assign"
-        && astRoot.arguments.length === 2
-        && astRoot.arguments[0].type === "ObjectExpression"
-        && astRoot.arguments[0].properties.length === 0
+        && astRoot.callee.object.name === "JSON"
+        && astRoot.callee.property.name === "parse"
+        && astRoot.arguments.length === 1
+        && astRoot.arguments[0].type === "CallExpression"
+        && astRoot.arguments[0].callee.type === "MemberExpression"
+        && astRoot.arguments[0].callee.object.name === "JSON"
+        && astRoot.arguments[0].callee.property.name === "stringify"
+        && astRoot.arguments[0].arguments.length === 1
     ) {
         let ret = {
             type: "JMM_CLONE",
-            argument: astRoot.arguments[1]
+            argument: astRoot.arguments[0].arguments[0]
         };
         return ret;
     }
