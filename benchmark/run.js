@@ -34,7 +34,7 @@ for (let prog of ["fannkuch", "spectralnorm", "nbody"]) {
             console.log('Fastest is ' + this.filter('fastest').map('name'));
         })
         .run({
-            async: true,
+            async: false,
             maxTime: 1
         });
 }
