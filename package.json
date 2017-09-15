@@ -19,11 +19,13 @@
   "license": "GPL-3.0",
   "dependencies": {
     "acorn": "^5.1.1",
+    "benchmark": "^2.1.4",
     "commander": "^2.11.0",
     "deasync": "^0.1.10",
     "dedent": "^0.7.0",
     "fs-extra": "^4.0.1",
     "fs-path": "0.0.23",
+    "microtime": "^2.1.6",
     "tern": "^0.21.0",
     "uglify-js": "^3.0.28"
   },
