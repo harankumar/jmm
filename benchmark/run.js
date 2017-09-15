@@ -3,9 +3,9 @@ const Benchmark = require('benchmark');
 const execSync = require("child_process").execSync;
 
 const params = {
-    "fannkuch": 6, //12,
-    "spectralnorm": 5, //500,
-    "nbody": 5, //0000000
+    "fannkuch": 12,
+    "spectralnorm": 5500,
+    "nbody": 50000000
 };
 
 for (let prog of ["fannkuch", "spectralnorm", "nbody"]) {
