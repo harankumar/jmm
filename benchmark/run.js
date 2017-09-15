@@ -3,8 +3,8 @@ const Benchmark = require('benchmark');
 const execSync = require("child_process").execSync;
 
 const params = {
-    "fannkuch": 12
-    "spectralnorm": 5500
+    "fannkuch": 12,
+    "spectralnorm": 5500,
     "nbody": 50000000
 };
 
