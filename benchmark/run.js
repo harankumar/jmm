@@ -1,6 +1,6 @@
 const Benchmark = require('benchmark');
-
 const execSync = require("child_process").execSync;
+const fs = require('fs-path');
 
 const params = {
     "fannkuch": 12,
@@ -32,6 +32,7 @@ for (let prog of ["fannkuch", "spectralnorm", "nbody"]) {
         })
         .on('complete', function () {
             console.log('Fastest is ' + this.filter('fastest').map('name'));
+            fs.writeFileSync(`./raw_data/${prog}.json`, JSON.stringify(this, null, 2));
         })
         .run({
             async: false,
