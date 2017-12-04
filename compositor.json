@@ -1,0 +1,90 @@
+{
+  "name": "harankumar/jmm",
+  "version": "0.1.4",
+  "libraries": {
+    "xv": "^1.1.25"
+  },
+  "title": "",
+  "branch": "",
+  "style": {
+    "name": "Material",
+    "componentSet": {
+      "nav": "nav/DarkAbsoluteNav",
+      "header": "header/GradientHeader",
+      "article": "article/BasicArticle",
+      "footer": "footer/BasicFooter"
+    },
+    "fontFamily": "Roboto, sans-serif",
+    "heading": {
+      "fontWeight": 500,
+      "letterSpacing": "-0.01em"
+    },
+    "colors": {
+      "text": "#212121",
+      "background": "#fff",
+      "primary": "#2196f3",
+      "secondary": "#1565c0",
+      "highlight": "#ff4081",
+      "border": "#e0e0e0",
+      "muted": "#f5f5f5"
+    },
+    "layout": {
+      "centered": true,
+      "bannerHeight": "80vh",
+      "maxWidth": 896
+    }
+  },
+  "content": [
+    {
+      "component": "nav",
+      "links": [
+        {
+          "href": "https://github.com/harankumar/jmm",
+          "text": "GitHub"
+        },
+        {
+          "href": "https://npmjs.com/package/jmm",
+          "text": "npm"
+        }
+      ]
+    },
+    {
+      "component": "header",
+      "heading": "jmm",
+      "subhead": "An experimental javascript to rust to wasm compiler",
+      "children": [
+        {
+          "component": "ui/TweetButton",
+          "text": "jmm: An experimental javascript to rust to wasm compiler",
+          "url": null
+        },
+        {
+          "component": "ui/GithubButton",
+          "user": "harankumar",
+          "repo": "jmm"
+        }
+      ],
+      "text": "v0.3.0"
+    },
+    {
+      "component": "article",
+      "metadata": {
+        "source": "github.readme"
+      },
+      "html": "\n<p>JMM (Javascript Minus Minus) compiles a subset of javascript to WASM.\nIt&apos;s super experimental, so don&apos;t use it in production (duh!).</p>\n<h2>Installation &amp; Usage</h2>\n<p>Clone the git repository and install dependencies:</p>\n<pre><span class=\"hljs-symbol\">$</span> git clone https:<span class=\"hljs-comment\">//github.com/harankumar/jmm.git</span>\n<span class=\"hljs-symbol\">$</span> cd jmm\n<span class=\"hljs-symbol\">$</span> npm install\n<span class=\"hljs-symbol\">$</span> cd src</pre><p>Run a test:</p>\n<pre>$ <span class=\"hljs-keyword\">node</span> <span class=\"hljs-title\">jmm</span> -t <span class=\"hljs-tag\">&lt;test&gt;</span></pre><p><code>&lt;test&gt;</code> is the name of any of the tests in the <code>/test/</code> directory. This will create a rust file in the <code>/test/&lt;test&gt;/build</code> directory.</p>\n<p>If you wish to then compile this to WebAssembly, add the flag <code>-r true</code> at the end of the command. It&apos;ll automatically generate an HTML page in <code>test/&lt;test&gt;/build</code> where you can see the code running.</p>\n<h2>Dependencies</h2>\n<p>JMM requires node, emscripten, and rust to be installed on your system. Make sure your emscripten version is up to date (you might have to build from source) so that you can compile to WASM. The latter two dependencies are technically unnecessary if you just want to generate rust code without running it, but that would be pretty boring, now wouldn&apos;t it?</p>\n<h2>What&apos;s in a subset?</h2>\n<p>JMM is a subset of Javascript, specifically the <a href=\"http://www.ecma-international.org/ecma-262/5.1/\">2011 ECMAScript Specification (ECMA-262 5.1)</a>.</p>\n<p>Ultimately it should include the following:</p>\n<ul>\n<li>all primitive types and operations, except null and undefined</li>\n<li>objects, including arrays, that follow Rust&apos;s borrowing/referencing rules<ul>\n<li>objects for which a &quot;fake class&quot; can be created</li>\n<li>arrays for which all members are the same type</li>\n<li>objects without functions or <code>this</code>, that can be treated as maps</li>\n</ul>\n</li>\n<li>functions, including closures</li>\n</ul>\n<h3>Completeness</h3>\n<table>\n<thead>\n<tr>\n<th>Category</th>\n<th>SubCategory</th>\n<th></th>\n<th></th>\n<th></th>\n<th></th>\n<th></th>\n<th></th>\n<th></th>\n<th></th>\n<th></th>\n<th></th>\n<th></th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><strong>Types</strong></td>\n<td>:poultry_leg: Undefined</td>\n<td>:poultry_leg: Null</td>\n<td>:hatching_chick: Boolean</td>\n<td>:hatching_chick: String</td>\n<td>:hatching_chick: Number</td>\n<td>:poultry_leg: Object</td>\n<td>:poultry_leg: Reference</td>\n<td>:hatching_chick: List</td>\n<td>:poultry_leg: Completion</td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td><strong>Type Conversion</strong></td>\n<td>:hatching_chick: Primitive</td>\n<td>:hatching_chick: Boolean</td>\n<td>:hatching_chick: Numbers</td>\n<td>:hatching_chick: String</td>\n<td>:poultry_leg: Object</td>\n<td>:poultry_leg: Callable</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td><strong>Expressions</strong></td>\n<td>:hatching_chick: Primary</td>\n<td>:hatching_chick: LHS</td>\n<td>:hatching_chick: Postfix</td>\n<td>:hatching_chick: Unary</td>\n<td>:chicken: Multiplicative</td>\n<td>:chicken: Additive</td>\n<td>:hatching_chick: Relational</td>\n<td>:hatching_chick: Equality</td>\n<td>:chicken: Bitwise</td>\n<td>:chicken: Logical</td>\n<td>:chicken: Conditional</td>\n<td>:hatching_chick: Assignment</td>\n</tr>\n<tr>\n<td><strong>Statements</strong></td>\n<td>:egg: Block</td>\n<td>:hatching_chick: Variable</td>\n<td>:chicken: If</td>\n<td>:chicken: Iteration</td>\n<td>:hatching_chick: Continue</td>\n<td>:hatching_chick: Break</td>\n<td>:chicken: Return</td>\n<td>:poultry_leg: With</td>\n<td>:chicken: Switch</td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td><strong>Function</strong></td>\n<td>:hatching_chick: Definition</td>\n<td>:hatching_chick: Call</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td><strong>Built-in Objects</strong></td>\n<td>:poultry_leg: Global</td>\n<td>:poultry_leg: Object</td>\n<td>:egg: Function</td>\n<td>:egg: Array</td>\n<td>:egg: String</td>\n<td>:egg: Boolean</td>\n<td>:egg: Number</td>\n<td>:egg: Math</td>\n<td>:egg: Date</td>\n<td>:egg: RegExp</td>\n<td>:poultry_leg: Error</td>\n<td>:poultry_leg: JSON</td>\n</tr>\n<tr>\n<td><strong>Errors</strong></td>\n<td>:egg: Throw</td>\n<td>:poultry_leg: Try-Catch</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n</tbody>\n</table>\n<p>:egg: long run feature\n:hatching_chick: in the works\n:chicken: completed (mostly)\n:poultry_leg: probably won&apos;t be implemented</p>\n<h2>Contributing</h2>\n<p>I&apos;m currently working on this for a science fair/school project, so I can&apos;t really accept any outside assistance. \nBut in a few months, I&apos;d be happy to start collaborating. \nIdeally, this project will stay low-key until I&apos;m able to be a proper maintainer and collaborator.</p>\n<h2>License</h2>\n<p>This project is GPLv3. See the license for any legal questions. \nIt&apos;s best that we keep the web free (in both senses of the word), and open source software is the best way to protect that.</p>\n"
+    },
+    {
+      "component": "footer",
+      "links": [
+        {
+          "href": "https://github.com/harankumar/jmm",
+          "text": "GitHub"
+        },
+        {
+          "href": "https://github.com/harankumar",
+          "text": "harankumar"
+        }
+      ]
+    }
+  ]
+}
